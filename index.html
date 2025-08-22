@@ -78,6 +78,20 @@
             height: 300px;
             margin-bottom: 20px;
         }
+        .maintenance-item {
+            border-left: 4px solid #6c757d;
+            padding-left: 15px;
+            margin-bottom: 15px;
+        }
+        .maintenance-pending {
+            border-left-color: #ffc107;
+        }
+        .maintenance-completed {
+            border-left-color: #28a745;
+        }
+        .maintenance-overdue {
+            border-left-color: #dc3545;
+        }
         @media (max-width: 768px) {
             .sidebar {
                 min-height: auto;
@@ -163,6 +177,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="#" data-target="maintenance">
+                                <i class="bi bi-tools"></i> <span>Maintenance</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="#" data-target="charts">
                                 <i class="bi bi-bar-chart"></i> <span>Charts</span>
                             </a>
@@ -204,15 +223,15 @@
                         <div class="col-md-3">
                             <div class="card text-center">
                                 <div class="card-body">
-                                    <h5 class="card-title">Health Status</h5>
-                                    <h3 id="health-status" class="text-warning">Good</h3>
+                                    <h5 class="card-title">Maintenance</h5>
+                                    <h3 id="maintenance-count" class="text-warning">0</h3>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <div class="row mt-4">
-                        <div class="col-12">
+                        <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header bg-white">
                                     <h5 class="card-title mb-0">Recent Activities</h5>
@@ -232,6 +251,18 @@
                                                 <!-- Activities will be loaded here -->
                                             </tbody>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-white">
+                                    <h5 class="card-title mb-0">Upcoming Maintenance</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="upcoming-maintenance">
+                                        <!-- Upcoming maintenance will be loaded here -->
                                     </div>
                                 </div>
                             </div>
@@ -463,6 +494,93 @@
                     </div>
                 </div>
 
+                <!-- Maintenance Section -->
+                <div id="maintenance" class="content-section">
+                    <h2 class="mb-4">Maintenance Activities</h2>
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Scheduled Maintenance</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Activity</th>
+                                            <th>Type</th>
+                                            <th>Scheduled Date</th>
+                                            <th>Status</th>
+                                            <th>Priority</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="maintenance-table">
+                                        <!-- Maintenance activities will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-4">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Schedule New Maintenance Activity</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="maintenanceForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="maintenanceActivity" class="form-label">Activity *</label>
+                                            <input type="text" class="form-control" id="maintenanceActivity" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="maintenanceType" class="form-label">Type *</label>
+                                            <select class="form-select" id="maintenanceType" required>
+                                                <option value="weed-control">Weed Control</option>
+                                                <option value="revegetation">Revegetation</option>
+                                                <option value="monitoring">Monitoring</option>
+                                                <option value="survey">Survey</option>
+                                                <option value="erosion-control">Erosion Control</option>
+                                                <option value="pest-management">Pest Management</option>
+                                                <option value="water-quality">Water Quality Testing</option>
+                                                <option value="trail-maintenance">Trail Maintenance</option>
+                                                <option value="equipment">Equipment Maintenance</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="maintenanceDate" class="form-label">Scheduled Date *</label>
+                                            <input type="date" class="form-control" id="maintenanceDate" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="maintenancePriority" class="form-label">Priority *</label>
+                                            <select class="form-select" id="maintenancePriority" required>
+                                                <option value="low">Low</option>
+                                                <option value="medium">Medium</option>
+                                                <option value="high">High</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="maintenanceDescription" class="form-label">Description *</label>
+                                    <textarea class="form-control" id="maintenanceDescription" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Schedule Activity</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Charts Section -->
                 <div id="charts" class="content-section">
                     <h2 class="mb-4">Analytics & Charts</h2>
@@ -510,11 +628,11 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header bg-white">
-                                    <h5 class="card-title mb-0">Species Status Distribution</h5>
+                                    <h5 class="card-title mb-0">Maintenance Activity Types</h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-container">
-                                        <canvas id="speciesStatusChart"></canvas>
+                                        <canvas id="maintenanceTypeChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -525,7 +643,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header bg-white">
-                                    <h5 class="card-title mb-0">Monthly Assessment Activity</h5>
+                                    <h5 class="card-title mb-0">Monthly Activity Overview</h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-container" style="height: 400px;">
@@ -553,6 +671,9 @@
                 }
                 if (!localStorage.getItem('species')) {
                     localStorage.setItem('species', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('maintenance')) {
+                    localStorage.setItem('maintenance', JSON.stringify([]));
                 }
             },
             
@@ -608,6 +729,39 @@
                 let allSpecies = this.getSpecies();
                 allSpecies = allSpecies.filter(s => s.id !== id);
                 localStorage.setItem('species', JSON.stringify(allSpecies));
+            },
+            
+            getMaintenance: function() {
+                return JSON.parse(localStorage.getItem('maintenance') || '[]');
+            },
+            
+            saveMaintenance: function(maintenance) {
+                const maintenanceItems = this.getMaintenance();
+                maintenance.id = Date.now().toString();
+                maintenance.status = 'scheduled';
+                maintenanceItems.push(maintenance);
+                localStorage.setItem('maintenance', JSON.stringify(maintenanceItems));
+                return maintenance;
+            },
+            
+            updateMaintenanceStatus: function(id, status) {
+                let maintenanceItems = this.getMaintenance();
+                maintenanceItems = maintenanceItems.map(item => {
+                    if (item.id === id) {
+                        item.status = status;
+                        if (status === 'completed') {
+                            item.completedDate = new Date().toISOString().split('T')[0];
+                        }
+                    }
+                    return item;
+                });
+                localStorage.setItem('maintenance', JSON.stringify(maintenanceItems));
+            },
+            
+            deleteMaintenance: function(id) {
+                let maintenanceItems = this.getMaintenance();
+                maintenanceItems = maintenanceItems.filter(m => m.id !== id);
+                localStorage.setItem('maintenance', JSON.stringify(maintenanceItems));
             }
         };
 
@@ -615,7 +769,7 @@
         let projectStatusChart = null;
         let healthTrendChart = null;
         let speciesTypeChart = null;
-        let speciesStatusChart = null;
+        let maintenanceTypeChart = null;
         let monthlyActivityChart = null;
 
         // UI Functions
@@ -653,6 +807,7 @@
             document.getElementById('projects-count').textContent = db.getProjects().length;
             document.getElementById('assessments-count').textContent = db.getAssessments().length;
             document.getElementById('species-count').textContent = db.getSpecies().length;
+            document.getElementById('maintenance-count').textContent = db.getMaintenance().length;
             
             // Get latest health status
             const assessments = db.getAssessments();
@@ -678,6 +833,31 @@
                         <td>${activity.description.substring(0, 50)}...</td>
                         <td><span class="badge ${getHealthBadgeClass(activity.health)}">${activity.health.charAt(0).toUpperCase() + activity.health.slice(1)}</span></td>
                     `;
+                });
+            }
+            
+            // Load upcoming maintenance
+            const maintenanceItems = db.getMaintenance();
+            const upcomingMaintenance = maintenanceItems
+                .filter(item => item.status === 'scheduled')
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 5);
+                
+            const upcomingContainer = document.getElementById('upcoming-maintenance');
+            upcomingContainer.innerHTML = '';
+            
+            if (upcomingMaintenance.length === 0) {
+                upcomingContainer.innerHTML = '<p class="text-center">No upcoming maintenance</p>';
+            } else {
+                upcomingMaintenance.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = `maintenance-item ${getMaintenanceStatusClass(item)}`;
+                    itemElement.innerHTML = `
+                        <h6>${item.activity}</h6>
+                        <p class="mb-1">${formatDate(item.date)} - ${item.type.replace('-', ' ').toUpperCase()}</p>
+                        <span class="badge ${getPriorityBadgeClass(item.priority)}">${item.priority.toUpperCase()}</span>
+                    `;
+                    upcomingContainer.appendChild(itemElement);
                 });
             }
         }
@@ -750,18 +930,46 @@
             }
         }
 
+        function loadMaintenance() {
+            const maintenanceItems = db.getMaintenance();
+            const maintenanceTable = document.getElementById('maintenance-table');
+            maintenanceTable.innerHTML = '';
+            
+            if (maintenanceItems.length === 0) {
+                maintenanceTable.innerHTML = '<tr><td colspan="6" class="text-center">No maintenance activities scheduled</td></tr>';
+            } else {
+                maintenanceItems.forEach(item => {
+                    const row = maintenanceTable.insertRow();
+                    row.innerHTML = `
+                        <td>${item.activity}</td>
+                        <td>${item.type.replace('-', ' ').toUpperCase()}</td>
+                        <td>${formatDate(item.date)}</td>
+                        <td><span class="badge ${getMaintenanceStatusBadgeClass(item.status)}">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span></td>
+                        <td><span class="badge ${getPriorityBadgeClass(item.priority)}">${item.priority.toUpperCase()}</span></td>
+                        <td>
+                            ${item.status === 'scheduled' ? 
+                                `<button class="btn btn-sm btn-outline-success me-1" onclick="completeMaintenance('${item.id}')">Complete</button>` : 
+                                ''}
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteMaintenance('${item.id}')">Delete</button>
+                        </td>
+                    `;
+                });
+            }
+        }
+
         function loadCharts() {
             // Destroy existing charts if they exist
             if (projectStatusChart) projectStatusChart.destroy();
             if (healthTrendChart) healthTrendChart.destroy();
             if (speciesTypeChart) speciesTypeChart.destroy();
-            if (speciesStatusChart) speciesStatusChart.destroy();
+            if (maintenanceTypeChart) maintenanceTypeChart.destroy();
             if (monthlyActivityChart) monthlyActivityChart.destroy();
             
             // Load data
             const projects = db.getProjects();
             const assessments = db.getAssessments();
             const species = db.getSpecies();
+            const maintenance = db.getMaintenance();
             
             // Project Status Chart
             const projectStatusData = {
@@ -907,33 +1115,38 @@
                 }
             });
             
-            // Species Status Chart
-            const speciesStatusData = {
-                'native': 0,
-                'introduced': 0,
-                'weed': 0,
-                'pest': 0
+            // Maintenance Type Chart
+            const maintenanceTypeData = {
+                'weed-control': 0,
+                'revegetation': 0,
+                'monitoring': 0,
+                'survey': 0,
+                'erosion-control': 0,
+                'pest-management': 0,
+                'water-quality': 0,
+                'trail-maintenance': 0,
+                'equipment': 0,
+                'other': 0
             };
             
-            species.forEach(s => {
-                speciesStatusData[s.status]++;
+            maintenance.forEach(item => {
+                maintenanceTypeData[item.type]++;
             });
             
-            speciesStatusChart = new Chart(document.getElementById('speciesStatusChart'), {
+            // Filter out types with zero count
+            const filteredMaintenanceTypes = Object.keys(maintenanceTypeData).filter(key => maintenanceTypeData[key] > 0);
+            
+            maintenanceTypeChart = new Chart(document.getElementById('maintenanceTypeChart'), {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(speciesStatusData).map(key => 
-                        key.charAt(0).toUpperCase() + key.slice(1)
+                    labels: filteredMaintenanceTypes.map(key => 
+                        key.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
                     ),
                     datasets: [{
-                        label: 'Number of Species',
-                        data: Object.values(speciesStatusData),
-                        backgroundColor: [
-                            'rgba(75, 192, 192, 0.8)',
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(255, 206, 86, 0.8)',
-                            'rgba(255, 99, 132, 0.8)'
-                        ],
+                        label: 'Number of Activities',
+                        data: filteredMaintenanceTypes.map(key => maintenanceTypeData[key]),
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
                     }]
                 },
@@ -962,7 +1175,11 @@
                 const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
                 const monthLabel = date.toLocaleString('default', { month: 'short', year: 'numeric' });
                 lastSixMonths.push(monthKey);
-                monthlyData[monthKey] = { label: monthLabel, count: 0 };
+                monthlyData[monthKey] = { 
+                    label: monthLabel, 
+                    assessments: 0,
+                    maintenance: 0
+                };
             }
             
             // Count assessments by month
@@ -971,7 +1188,17 @@
                 const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
                 
                 if (monthlyData[monthKey]) {
-                    monthlyData[monthKey].count++;
+                    monthlyData[monthKey].assessments++;
+                }
+            });
+            
+            // Count maintenance by month
+            maintenance.forEach(item => {
+                const date = new Date(item.date);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                
+                if (monthlyData[monthKey]) {
+                    monthlyData[monthKey].maintenance++;
                 }
             });
             
@@ -979,13 +1206,22 @@
                 type: 'bar',
                 data: {
                     labels: lastSixMonths.map(key => monthlyData[key].label),
-                    datasets: [{
-                        label: 'Number of Assessments',
-                        data: lastSixMonths.map(key => monthlyData[key].count),
-                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
+                    datasets: [
+                        {
+                            label: 'Assessments',
+                            data: lastSixMonths.map(key => monthlyData[key].assessments),
+                            backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Maintenance',
+                            data: lastSixMonths.map(key => monthlyData[key].maintenance),
+                            backgroundColor: 'rgba(255, 159, 64, 0.8)',
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            borderWidth: 1
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
@@ -1053,6 +1289,23 @@
             showToast('Success', 'Species added successfully');
         });
 
+        document.getElementById('maintenanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const maintenance = {
+                activity: document.getElementById('maintenanceActivity').value,
+                type: document.getElementById('maintenanceType').value,
+                date: document.getElementById('maintenanceDate').value,
+                priority: document.getElementById('maintenancePriority').value,
+                description: document.getElementById('maintenanceDescription').value
+            };
+            
+            db.saveMaintenance(maintenance);
+            this.reset();
+            loadMaintenance();
+            showToast('Success', 'Maintenance activity scheduled successfully');
+        });
+
         // Delete functions
         function deleteProject(id) {
             if (confirm('Are you sure you want to delete this project?')) {
@@ -1075,6 +1328,22 @@
                 db.deleteSpecies(id);
                 loadSpecies();
                 showToast('Success', 'Species deleted successfully');
+            }
+        }
+
+        function deleteMaintenance(id) {
+            if (confirm('Are you sure you want to delete this maintenance activity?')) {
+                db.deleteMaintenance(id);
+                loadMaintenance();
+                showToast('Success', 'Maintenance activity deleted successfully');
+            }
+        }
+
+        function completeMaintenance(id) {
+            if (confirm('Mark this maintenance activity as completed?')) {
+                db.updateMaintenanceStatus(id, 'completed');
+                loadMaintenance();
+                showToast('Success', 'Maintenance activity marked as completed');
             }
         }
 
@@ -1121,6 +1390,33 @@
             return statusMap[status] || 'bg-secondary';
         }
 
+        function getMaintenanceStatusBadgeClass(status) {
+            const statusMap = {
+                'scheduled': 'bg-warning',
+                'completed': 'bg-success',
+                'overdue': 'bg-danger'
+            };
+            return statusMap[status] || 'bg-secondary';
+        }
+
+        function getPriorityBadgeClass(priority) {
+            const priorityMap = {
+                'low': 'bg-info',
+                'medium': 'bg-warning',
+                'high': 'bg-danger'
+            };
+            return priorityMap[priority] || 'bg-secondary';
+        }
+
+        function getMaintenanceStatusClass(item) {
+            const today = new Date();
+            const scheduledDate = new Date(item.date);
+            
+            if (item.status === 'completed') return 'maintenance-completed';
+            if (scheduledDate < today && item.status !== 'completed') return 'maintenance-overdue';
+            return 'maintenance-pending';
+        }
+
         // Navigation
         document.querySelectorAll('.sidebar .nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -1142,6 +1438,7 @@
                 if (target === 'projects') loadProjects();
                 if (target === 'assessments') loadAssessments();
                 if (target === 'species') loadSpecies();
+                if (target === 'maintenance') loadMaintenance();
                 if (target === 'charts') loadCharts();
             });
         });

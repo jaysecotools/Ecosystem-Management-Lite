@@ -3,43 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecosystem Manager Lite</title>
+    <title>EcoManager Pro | Ecosystem Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #16a085;
+            --accent-light: #1abc9c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --sidebar-width: 280px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Styles */
         .sidebar {
             min-height: 100vh;
-            background-color: #2c3e50;
+            width: var(--sidebar-width);
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
             color: white;
+            position: fixed;
+            z-index: 100;
+            transition: var(--transition);
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
         }
+
         .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.85);
             margin-bottom: 5px;
+            border-radius: 8px;
+            padding: 12px 15px;
+            transition: var(--transition);
+            font-weight: 500;
         }
+
         .sidebar .nav-link:hover, .sidebar .nav-link.active {
             color: white;
-            background-color: #34495e;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
         }
+
         .sidebar .nav-link i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            padding: 20px 25px;
+            font-size: 1.4rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .logo i {
             margin-right: 10px;
+            color: var(--accent-light);
         }
+
+        /* Main Content */
         .main-content {
-            background-color: #f8f9fa;
-            padding: 20px;
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+            transition: var(--transition);
         }
+
+        .section-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header h2 {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Card Styles */
         .card {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             border: none;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
         }
-        .species-card {
-            transition: transform 0.2s;
-        }
-        .species-card:hover {
+
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
             transform: translateY(-5px);
         }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 15px 20px;
+            font-weight: 600;
+            color: var(--primary);
+            border-radius: 12px 12px 0 0 !important;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .stat-card h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .stat-card .card-title {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* Table Styles */
+        .table th {
+            font-weight: 600;
+            color: var(--primary);
+            border-top: none;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(22, 160, 133, 0.05);
+        }
+
+        /* Form Styles */
+        .form-control, .form-select {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: var(--transition);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(22, 160, 133, 0.25);
+        }
+
+        .btn {
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-light);
+            border-color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        /* Badge Styles */
+        .badge {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        /* Chart Containers */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        /* Maintenance Items */
+        .maintenance-item {
+            border-left: 4px solid #6c757d;
+            padding-left: 15px;
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+
+        .maintenance-item:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .maintenance-pending {
+            border-left-color: var(--warning);
+        }
+
+        .maintenance-completed {
+            border-left-color: var(--success);
+        }
+
+        .maintenance-overdue {
+            border-left-color: var(--danger);
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+        }
+
+        /* View Toggle */
+        .view-toggle {
+            margin-bottom: 20px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Risk Indicators */
         .risk-indicator {
             width: 20px;
             height: 20px;
@@ -47,95 +253,84 @@
             display: inline-block;
             margin-right: 5px;
         }
+
         .risk-low {
-            background-color: #28a745;
+            background-color: var(--success);
         }
+
         .risk-medium {
-            background-color: #ffc107;
+            background-color: var(--warning);
         }
+
         .risk-high {
-            background-color: #dc3545;
+            background-color: var(--danger);
         }
-        .logo {
-            font-weight: 700;
-            padding: 15px;
-            font-size: 1.2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        /* Mobile Responsiveness */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .sidebar .logo span {
+                display: none;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.4rem;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .sidebar:hover {
+                width: var(--sidebar-width);
+            }
+            
+            .sidebar:hover .logo span {
+                display: inline;
+            }
+            
+            .sidebar:hover .nav-link span {
+                display: inline;
+            }
+            
+            .sidebar:hover .nav-link i {
+                margin-right: 12px;
+            }
         }
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1100;
-        }
-        .content-section {
-            display: none;
-        }
-        .content-section.active {
-            display: block;
-        }
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin-bottom: 20px;
-        }
-        .maintenance-item {
-            border-left: 4px solid #6c757d;
-            padding-left: 15px;
-            margin-bottom: 15px;
-        }
-        .maintenance-pending {
-            border-left-color: #ffc107;
-        }
-        .maintenance-completed {
-            border-left-color: #28a745;
-        }
-        .maintenance-overdue {
-            border-left-color: #dc3545;
-        }
-        .calendar-view {
-            display: none;
-        }
-        .calendar-view.active {
-            display: block;
-        }
-        .list-view.active {
-            display: block;
-        }
-        .fc-event {
-            cursor: pointer;
-        }
-        .view-toggle {
-            margin-bottom: 15px;
-        }
-        .project-assignment {
-            border-left: 3px solid #0d6efd;
-            padding-left: 10px;
-            margin: 10px 0;
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-        }
+
         @media (max-width: 768px) {
             .sidebar {
-                min-height: auto;
                 width: 100%;
-                position: fixed;
+                height: 70px;
+                min-height: 70px;
                 bottom: 0;
-                z-index: 1000;
+                top: auto;
                 padding: 0;
             }
+            
             .sidebar .logo {
                 display: none;
             }
+            
             .sidebar .nav {
                 flex-direction: row;
                 overflow-x: auto;
                 padding: 0.5rem;
             }
+            
             .sidebar .nav-item {
                 flex-shrink: 0;
             }
+            
             .sidebar .nav-link {
                 padding: 0.5rem;
                 margin-bottom: 0;
@@ -144,25 +339,51 @@
                 text-align: center;
                 font-size: 0.8rem;
             }
+            
             .sidebar .nav-link i {
                 margin-right: 0;
                 display: block;
                 margin-bottom: 0.25rem;
                 font-size: 1.2rem;
             }
-            .sidebar .nav-link span {
-                display: none;
-            }
+            
             .main-content {
-                padding: 1rem;
-                margin-bottom: 60px;
+                margin-left: 0;
+                margin-bottom: 70px;
+                padding: 15px;
             }
-            .fc-toolbar {
-                flex-direction: column;
-                align-items: flex-start;
+            
+            .stat-card h3 {
+                font-size: 1.8rem;
             }
-            .fc-toolbar .fc-center {
-                margin: 10px 0;
+        }
+
+        /* Accessibility Improvements */
+        .btn:focus, .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.5);
+        }
+        
+        .nav-link:focus {
+            outline: 2px solid var(--accent-light);
+            outline-offset: -2px;
+        }
+        
+        /* High contrast support */
+        @media (prefers-contrast: high) {
+            .sidebar {
+                background: var(--primary);
+            }
+            
+            .card {
+                border: 1px solid #ddd;
+            }
+        }
+        
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+                animation: none !important;
             }
         }
     </style>
@@ -171,6 +392,7 @@
     <div class="toast-container">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
                 <strong class="me-auto" id="toast-title">Notification</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
@@ -180,41 +402,44 @@
         </div>
     </div>
 
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container-fluid p-0">
+        <div class="row g-0">
             <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar p-0">
-                <div class="logo">Ecosystem Manager</div>
+            <div class="sidebar">
+                <div class="logo">
+                    <i class="bi bi-tree-fill"></i>
+                    <span>EcoManager Pro</span>
+                </div>
                 <div class="p-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#" data-target="dashboard">
+                            <a class="nav-link active" href="#" data-target="dashboard" aria-label="Dashboard">
                                 <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-target="projects">
+                            <a class="nav-link" href="#" data-target="projects" aria-label="Projects">
                                 <i class="bi bi-folder"></i> <span>Projects</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-target="assessments">
+                            <a class="nav-link" href="#" data-target="assessments" aria-label="Assessments">
                                 <i class="bi bi-clipboard-check"></i> <span>Assessments</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-target="species">
+                            <a class="nav-link" href="#" data-target="species" aria-label="Species">
                                 <i class="bi bi-tree"></i> <span>Species</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-target="maintenance">
+                            <a class="nav-link" href="#" data-target="maintenance" aria-label="Maintenance">
                                 <i class="bi bi-tools"></i> <span>Maintenance</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-target="charts">
-                                <i class="bi bi-bar-chart"></i> <span>Charts</span>
+                            <a class="nav-link" href="#" data-target="charts" aria-label="Analytics">
+                                <i class="bi bi-bar-chart"></i> <span>Analytics</span>
                             </a>
                         </li>
                     </ul>
@@ -222,40 +447,75 @@
             </div>
 
             <!-- Main Content -->
-            <div class="col-md-9 col-lg-10 main-content">
+            <div class="main-content">
                 <!-- Dashboard Section -->
                 <div id="dashboard" class="content-section active">
-                    <h2 class="mb-4">Dashboard</h2>
+                    <div class="section-header">
+                        <h2>Dashboard</h2>
+                        <p class="text-muted">Overview of your ecosystem management activities</p>
+                    </div>
+                    
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="card text-center">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="card stat-card">
                                 <div class="card-body">
                                     <h5 class="card-title">Projects</h5>
                                     <h3 id="projects-count" class="text-primary">0</h3>
+                                    <p class="text-muted mb-0">Active initiatives</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card text-center">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="card stat-card">
                                 <div class="card-body">
                                     <h5 class="card-title">Assessments</h5>
                                     <h3 id="assessments-count" class="text-info">0</h3>
+                                    <p class="text-muted mb-0">Surveys completed</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card text-center">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="card stat-card">
                                 <div class="card-body">
                                     <h5 class="card-title">Species</h5>
                                     <h3 id="species-count" class="text-success">0</h3>
+                                    <p class="text-muted mb-0">Tracked species</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card text-center">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="card stat-card">
                                 <div class="card-body">
                                     <h5 class="card-title">Maintenance</h5>
                                     <h3 id="maintenance-count" class="text-warning">0</h3>
+                                    <p class="text-muted mb-0">Scheduled tasks</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Ecosystem Health Overview</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="healthTrendChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Project Status</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="projectStatusChart"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -264,7 +524,7 @@
                     <div class="row mt-4">
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header bg-white">
+                                <div class="card-header">
                                     <h5 class="card-title mb-0">Recent Activities</h5>
                                 </div>
                                 <div class="card-body">
@@ -289,7 +549,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header bg-white">
+                                <div class="card-header">
                                     <h5 class="card-title mb-0">Upcoming Maintenance</h5>
                                 </div>
                                 <div class="card-body">
@@ -304,9 +564,13 @@
 
                 <!-- Projects Section -->
                 <div id="projects" class="content-section">
-                    <h2 class="mb-4">Projects</h2>
+                    <div class="section-header">
+                        <h2>Projects</h2>
+                        <p class="text-muted">Manage your ecosystem restoration projects</p>
+                    </div>
+                    
                     <div class="card">
-                        <div class="card-header bg-white">
+                        <div class="card-header">
                             <h5 class="card-title mb-0">Project List</h5>
                         </div>
                         <div class="card-body">
@@ -333,7 +597,7 @@
                     </div>
                     
                     <div class="card mt-4">
-                        <div class="card-header bg-white">
+                        <div class="card-header">
                             <h5 class="card-title mb-0">Add New Project</h5>
                         </div>
                         <div class="card-body">
@@ -383,9 +647,13 @@
 
                 <!-- Assessments Section -->
                 <div id="assessments" class="content-section">
-                    <h2 class="mb-4">Assessments</h2>
+                    <div class="section-header">
+                        <h2>Assessments</h2>
+                        <p class="text-muted">Conduct and review ecosystem health assessments</p>
+                    </div>
+                    
                     <div class="card">
-                        <div class="card-header bg-white">
+                        <div class="card-header">
                             <h5 class="card-title mb-0">Assessment History</h5>
                         </div>
                         <div class="card-body">
@@ -416,7 +684,7 @@
                     </div>
                     
                     <div class="card mt-4">
-                        <div class="card-header bg-white">
+                        <div class="card-header">
                             <h5 class="card-title mb-0">New Assessment</h5>
                         </div>
                         <div class="card-body">
@@ -470,9 +738,13 @@
 
                 <!-- Species Section -->
                 <div id="species" class="content-section">
-                    <h2 class="mb-4">Species</h2>
+                    <div class="section-header">
+                        <h2>Species</h2>
+                        <p class="text-muted">Track and manage species in your ecosystems</p>
+                    </div>
+                    
                     <div class="card">
-                        <div class="card-header bg-white">
+                        <div class="card-header">
                             <h5 class="card-title mb-0">Species Database</h5>
                         </div>
                         <div class="card-body">
@@ -504,7 +776,7 @@
                     </div>
                     
                     <div class="card mt-4">
-                        <div class="card-header bg-white">
+                        <div class="card-header">
                             <h5 class="card-title mb-0">Add New Species</h5>
                         </div>
                         <div class="card-body">
@@ -567,7 +839,10 @@
 
                 <!-- Maintenance Section -->
                 <div id="maintenance" class="content-section">
-                    <h2 class="mb-4">Maintenance Activities</h2>
+                    <div class="section-header">
+                        <h2>Maintenance</h2>
+                        <p class="text-muted">Schedule and track ecosystem maintenance activities</p>
+                    </div>
                     
                     <div class="view-toggle btn-group mb-3" role="group">
                         <button type="button" class="btn btn-outline-primary active" data-view="list-view">
@@ -581,7 +856,7 @@
                     <!-- List View -->
                     <div id="list-view" class="list-view active">
                         <div class="card">
-                            <div class="card-header bg-white">
+                            <div class="card-header">
                                 <h5 class="card-title mb-0">Scheduled Maintenance</h5>
                             </div>
                             <div class="card-body">
@@ -617,7 +892,7 @@
                     <!-- Calendar View -->
                     <div id="calendar-view" class="calendar-view">
                         <div class="card">
-                            <div class="card-header bg-white">
+                            <div class="card-header">
                                 <h5 class="card-title mb-0">Maintenance Calendar</h5>
                             </div>
                             <div class="card-body">
@@ -627,7 +902,7 @@
                     </div>
                     
                     <div class="card mt-4">
-                        <div class="card-header bg-white">
+                        <div class="card-header">
                             <h5 class="card-title mb-0">Schedule New Maintenance Activity</h5>
                         </div>
                         <div class="card-body">
@@ -692,14 +967,17 @@
                     </div>
                 </div>
 
-                <!-- Charts Section -->
+                <!-- Analytics Section -->
                 <div id="charts" class="content-section">
-                    <h2 class="mb-4">Analytics & Charts</h2>
+                    <div class="section-header">
+                        <h2>Analytics</h2>
+                        <p class="text-muted">Visualize and analyze your ecosystem data</p>
+                    </div>
                     
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header bg-white">
+                                <div class="card-header">
                                     <h5 class="card-title mb-0">Project Status Distribution</h5>
                                 </div>
                                 <div class="card-body">
@@ -711,7 +989,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header bg-white">
+                                <div class="card-header">
                                     <h5 class="card-title mb-0">Ecosystem Health Trend</h5>
                                 </div>
                                 <div class="card-body">
@@ -726,7 +1004,7 @@
                     <div class="row mt-4">
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header bg-white">
+                                <div class="card-header">
                                     <h5 class="card-title mb-0">Species Distribution by Type</h5>
                                 </div>
                                 <div class="card-body">
@@ -738,7 +1016,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header bg-white">
+                                <div class="card-header">
                                     <h5 class="card-title mb-0">Maintenance Activity Types</h5>
                                 </div>
                                 <div class="card-body">
@@ -753,7 +1031,7 @@
                     <div class="row mt-4">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header bg-white">
+                                <div class="card-header">
                                     <h5 class="card-title mb-0">Monthly Activity Overview</h5>
                                 </div>
                                 <div class="card-body">
@@ -1023,6 +1301,9 @@
                     upcomingContainer.appendChild(itemElement);
                 });
             }
+            
+            // Load charts
+            loadCharts();
         }
 
         function loadProjects() {
@@ -1788,19 +2069,25 @@
                 document.querySelectorAll('.content-section').forEach(section => {
                     section.classList.remove('active');
                 });
-                document.getElementById(target).classList.add('active');
                 
-                // Load data for the section
-                if (target === 'dashboard') loadDashboard();
-                if (target === 'projects') loadProjects();
-                if (target === 'assessments') loadAssessments();
-                if (target === 'species') loadSpecies();
-                if (target === 'maintenance') {
-                    loadMaintenance();
-                    // Reset to list view when navigating to maintenance
-                    document.querySelector('[data-view="list-view"]').click();
-                }
-                if (target === 'charts') loadCharts();
+                setTimeout(() => {
+                    document.getElementById(target).classList.add('active');
+                    
+                    // Load data for the section
+                    if (target === 'dashboard') loadDashboard();
+                    if (target === 'projects') loadProjects();
+                    if (target === 'assessments') loadAssessments();
+                    if (target === 'species') loadSpecies();
+                    if (target === 'maintenance') {
+                        loadMaintenance();
+                        // Reset to list view when navigating to maintenance
+                        document.querySelector('[data-view="list-view"]').click();
+                    }
+                    if (target === 'charts') loadCharts();
+                }, 50);
+                
+                // Update page title
+                document.title = `${this.querySelector('span').textContent} | EcoManager Pro`;
             });
         });
 
@@ -1810,6 +2097,12 @@
             loadDashboard();
             loadProjectSelects();
             setupViewToggle();
+            
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
         }
 
         // Start the app when the DOM is loaded

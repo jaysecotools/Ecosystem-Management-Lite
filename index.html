@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- jsPDF and html2canvas libraries for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --primary: #2c3e50;
@@ -440,6 +443,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-target="charts" aria-label="Analytics">
                                 <i class="bi bi-bar-chart"></i> <span>Analytics</span>
+                            </a>
+                        </li>
+                        <!-- New Data Menu Item -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-target="data" aria-label="Data">
+                                <i class="bi bi-database"></i> <span>Data</span>
                             </a>
                         </li>
                     </ul>
@@ -1043,6 +1052,108 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Data Section (New) -->
+                <div id="data" class="content-section">
+                    <div class="section-header">
+                        <h2>Data Management</h2>
+                        <p class="text-muted">Export and import your ecosystem data</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Export Data</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="exportProject" class="form-label">Select Project:</label>
+                                        <select class="form-select" id="exportProject">
+                                            <option value="all">All Projects</option>
+                                            <!-- Project options will be loaded here -->
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Export Format:</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exportFormat" id="exportJSON" value="json" checked>
+                                            <label class="form-check-label" for="exportJSON">
+                                                JSON (for backup and sharing)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exportFormat" id="exportPDF" value="pdf">
+                                            <label class="form-check-label" for="exportPDF">
+                                                PDF Report
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" id="exportButton">
+                                        <i class="bi bi-download"></i> Export Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Import Data</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="importFile" class="form-label">Select JSON File:</label>
+                                        <input class="form-control" type="file" id="importFile" accept=".json">
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="overwriteData">
+                                        <label class="form-check-label" for="overwriteData">
+                                            Overwrite existing data
+                                        </label>
+                                    </div>
+                                    <button type="button" class="btn btn-success" id="importButton">
+                                        <i class="bi bi-upload"></i> Import Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Data Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 col-6">
+                                    <div class="text-center p-3 border rounded">
+                                        <h4 id="data-projects-count">0</h4>
+                                        <p class="mb-0">Projects</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="text-center p-3 border rounded">
+                                        <h4 id="data-assessments-count">0</h4>
+                                        <p class="mb-0">Assessments</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="text-center p-3 border rounded">
+                                        <h4 id="data-species-count">0</h4>
+                                        <p class="mb-0">Species</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="text-center p-3 border rounded">
+                                        <h4 id="data-maintenance-count">0</h4>
+                                        <p class="mb-0">Maintenance Tasks</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1069,6 +1180,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
     <script>
+        // Initialize jsPDF
+        window.jsPDF = window.jspdf.jsPDF;
+
         // Simple database using localStorage
         const db = {
             init: function() {
@@ -1216,10 +1330,10 @@
 
         function loadProjectSelects() {
             const projects = db.getProjects();
-            const projectSelects = document.querySelectorAll('#assessmentProject, #speciesProject, #maintenanceProject, #assessmentProjectFilter, #speciesProjectFilter, #maintenanceProjectFilter');
+            const projectSelects = document.querySelectorAll('#assessmentProject, #speciesProject, #maintenanceProject, #assessmentProjectFilter, #speciesProjectFilter, #maintenanceProjectFilter, #exportProject');
             
             projectSelects.forEach(select => {
-                const isFilter = select.id.includes('Filter');
+                const isFilter = select.id.includes('Filter') || select.id === 'exportProject';
                 const currentValue = select.value;
                 
                 // Clear existing options except the first one
@@ -1813,6 +1927,230 @@
             });
         }
 
+        // Data Export/Import Functions
+        function exportData() {
+            const projectId = document.getElementById('exportProject').value;
+            const exportFormat = document.querySelector('input[name="exportFormat"]:checked').value;
+            
+            if (exportFormat === 'json') {
+                exportToJSON(projectId);
+            } else if (exportFormat === 'pdf') {
+                exportToPDF(projectId);
+            }
+        }
+
+        function exportToJSON(projectId) {
+            const data = {
+                projects: projectId === 'all' ? db.getProjects() : db.getProjects().filter(p => p.id === projectId),
+                assessments: projectId === 'all' ? db.getAssessments() : db.getAssessments().filter(a => a.projectId === projectId),
+                species: projectId === 'all' ? db.getSpecies() : db.getSpecies().filter(s => s.projectId === projectId),
+                maintenance: projectId === 'all' ? db.getMaintenance() : db.getMaintenance().filter(m => m.projectId === projectId),
+                exportedAt: new Date().toISOString(),
+                app: 'EcoManager Pro'
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `ecomanager-${projectId === 'all' ? 'all-projects' : 'project-' + projectId}-${new Date().toISOString().slice(0, 10)}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showToast('Export Successful', 'Data has been exported successfully', 'success');
+        }
+
+        function exportToPDF(projectId) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add title
+            doc.setFontSize(20);
+            doc.text('EcoManager Pro Report', 105, 15, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 22, { align: 'center' });
+            
+            let yPosition = 30;
+            
+            // Project information
+            const projects = projectId === 'all' ? db.getProjects() : db.getProjects().filter(p => p.id === projectId);
+            
+            if (projects.length > 0) {
+                doc.setFontSize(16);
+                doc.text('Projects', 14, yPosition);
+                yPosition += 10;
+                
+                projects.forEach((project, index) => {
+                    if (yPosition > 260) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`${index + 1}. ${project.name}`, 14, yPosition);
+                    doc.setFont(undefined, 'normal');
+                    
+                    yPosition += 7;
+                    doc.text(`Status: ${project.status}`, 14, yPosition);
+                    yPosition += 7;
+                    doc.text(`Start Date: ${formatDate(project.startDate)}`, 14, yPosition);
+                    yPosition += 7;
+                    doc.text(`Description: ${project.description}`, 14, yPosition);
+                    yPosition += 10;
+                });
+            }
+            
+            // Add a new page if we're at the bottom
+            if (yPosition > 260) {
+                doc.addPage();
+                yPosition = 20;
+            }
+            
+            // Assessments information
+            const assessments = projectId === 'all' ? db.getAssessments() : db.getAssessments().filter(a => a.projectId === projectId);
+            
+            if (assessments.length > 0) {
+                doc.setFontSize(16);
+                doc.text('Assessments', 14, yPosition);
+                yPosition += 10;
+                
+                assessments.forEach((assessment, index) => {
+                    if (yPosition > 260) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`${index + 1}. ${formatDate(assessment.date)} - ${assessment.assessor}`, 14, yPosition);
+                    doc.setFont(undefined, 'normal');
+                    
+                    yPosition += 7;
+                    doc.text(`Health Status: ${assessment.health}`, 14, yPosition);
+                    yPosition += 7;
+                    doc.text(`Project: ${getProjectName(assessment.projectId)}`, 14, yPosition);
+                    yPosition += 7;
+                    doc.text(`Description: ${assessment.description.substring(0, 100)}...`, 14, yPosition);
+                    yPosition += 10;
+                });
+            }
+            
+            // Save the PDF
+            const fileName = `ecomanager-report-${projectId === 'all' ? 'all-projects' : 'project-' + projectId}-${new Date().toISOString().slice(0, 10)}.pdf`;
+            doc.save(fileName);
+            
+            showToast('PDF Export Successful', 'PDF report has been generated successfully', 'success');
+        }
+
+        function importData() {
+            const fileInput = document.getElementById('importFile');
+            const overwriteData = document.getElementById('overwriteData').checked;
+            
+            if (!fileInput.files.length) {
+                showToast('Import Error', 'Please select a file to import', 'error');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Validate the imported data structure
+                    if (!data.projects || !data.assessments || !data.species || !data.maintenance) {
+                        throw new Error('Invalid file format');
+                    }
+                    
+                    if (overwriteData) {
+                        // Completely replace existing data
+                        localStorage.setItem('projects', JSON.stringify(data.projects));
+                        localStorage.setItem('assessments', JSON.stringify(data.assessments));
+                        localStorage.setItem('species', JSON.stringify(data.species));
+                        localStorage.setItem('maintenance', JSON.stringify(data.maintenance));
+                    } else {
+                        // Merge with existing data
+                        const existingProjects = db.getProjects();
+                        const existingAssessments = db.getAssessments();
+                        const existingSpecies = db.getSpecies();
+                        const existingMaintenance = db.getMaintenance();
+                        
+                        // Merge projects, avoiding duplicates by ID
+                        const mergedProjects = [...existingProjects];
+                        data.projects.forEach(newProject => {
+                            if (!existingProjects.find(p => p.id === newProject.id)) {
+                                mergedProjects.push(newProject);
+                            }
+                        });
+                        
+                        // Merge assessments
+                        const mergedAssessments = [...existingAssessments];
+                        data.assessments.forEach(newAssessment => {
+                            if (!existingAssessments.find(a => a.id === newAssessment.id)) {
+                                mergedAssessments.push(newAssessment);
+                            }
+                        });
+                        
+                        // Merge species
+                        const mergedSpecies = [...existingSpecies];
+                        data.species.forEach(newSpecies => {
+                            if (!existingSpecies.find(s => s.id === newSpecies.id)) {
+                                mergedSpecies.push(newSpecies);
+                            }
+                        });
+                        
+                        // Merge maintenance
+                        const mergedMaintenance = [...existingMaintenance];
+                        data.maintenance.forEach(newMaintenance => {
+                            if (!existingMaintenance.find(m => m.id === newMaintenance.id)) {
+                                mergedMaintenance.push(newMaintenance);
+                            }
+                        });
+                        
+                        // Save merged data
+                        localStorage.setItem('projects', JSON.stringify(mergedProjects));
+                        localStorage.setItem('assessments', JSON.stringify(mergedAssessments));
+                        localStorage.setItem('species', JSON.stringify(mergedSpecies));
+                        localStorage.setItem('maintenance', JSON.stringify(mergedMaintenance));
+                    }
+                    
+                    // Refresh the UI
+                    loadDashboard();
+                    loadProjects();
+                    loadAssessments();
+                    loadSpecies();
+                    loadMaintenance();
+                    loadProjectSelects();
+                    
+                    showToast('Import Successful', 'Data has been imported successfully', 'success');
+                    
+                    // Clear the file input
+                    fileInput.value = '';
+                    
+                } catch (error) {
+                    console.error('Import error:', error);
+                    showToast('Import Error', 'Failed to import data. Please check the file format.', 'error');
+                }
+            };
+            
+            reader.onerror = function() {
+                showToast('Import Error', 'Failed to read the file', 'error');
+            };
+            
+            reader.readAsText(file);
+        }
+
+        function loadDataSummary() {
+            document.getElementById('data-projects-count').textContent = db.getProjects().length;
+            document.getElementById('data-assessments-count').textContent = db.getAssessments().length;
+            document.getElementById('data-species-count').textContent = db.getSpecies().length;
+            document.getElementById('data-maintenance-count').textContent = db.getMaintenance().length;
+        }
+
         // Form handlers
         document.getElementById('projectForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1828,6 +2166,7 @@
             db.saveProject(project);
             this.reset();
             loadProjects();
+            loadDataSummary();
             showToast('Success', 'Project created successfully');
         });
 
@@ -1845,6 +2184,7 @@
             db.saveAssessment(assessment);
             this.reset();
             loadAssessments();
+            loadDataSummary();
             showToast('Success', 'Assessment saved successfully');
         });
 
@@ -1863,6 +2203,7 @@
             db.saveSpecies(species);
             this.reset();
             loadSpecies();
+            loadDataSummary();
             showToast('Success', 'Species added successfully');
         });
 
@@ -1881,6 +2222,7 @@
             db.saveMaintenance(maintenance);
             this.reset();
             loadMaintenance();
+            loadDataSummary();
             showToast('Success', 'Maintenance activity scheduled successfully');
         });
 
@@ -1888,6 +2230,10 @@
         document.getElementById('assessmentProjectFilter').addEventListener('change', loadAssessments);
         document.getElementById('speciesProjectFilter').addEventListener('change', loadSpecies);
         document.getElementById('maintenanceProjectFilter').addEventListener('change', loadMaintenance);
+
+        // Data section handlers
+        document.getElementById('exportButton').addEventListener('click', exportData);
+        document.getElementById('importButton').addEventListener('click', importData);
 
         // Delete functions
         function deleteProject(id) {
@@ -1920,6 +2266,7 @@
                 loadAssessments();
                 loadSpecies();
                 loadMaintenance();
+                loadDataSummary();
                 showToast('Success', 'Project and all associated items deleted successfully');
             }
         }
@@ -1928,6 +2275,7 @@
             if (confirm('Are you sure you want to delete this assessment?')) {
                 db.deleteAssessment(id);
                 loadAssessments();
+                loadDataSummary();
                 showToast('Success', 'Assessment deleted successfully');
             }
         }
@@ -1936,6 +2284,7 @@
             if (confirm('Are you sure you want to delete this species?')) {
                 db.deleteSpecies(id);
                 loadSpecies();
+                loadDataSummary();
                 showToast('Success', 'Species deleted successfully');
             }
         }
@@ -1944,6 +2293,7 @@
             if (confirm('Are you sure you want to delete this maintenance activity?')) {
                 db.deleteMaintenance(id);
                 loadMaintenance();
+                loadDataSummary();
                 showToast('Success', 'Maintenance activity deleted successfully');
             }
         }
@@ -2084,6 +2434,10 @@
                         document.querySelector('[data-view="list-view"]').click();
                     }
                     if (target === 'charts') loadCharts();
+                    if (target === 'data') {
+                        loadDataSummary();
+                        loadProjectSelects();
+                    }
                 }, 50);
                 
                 // Update page title
@@ -2097,6 +2451,7 @@
             loadDashboard();
             loadProjectSelects();
             setupViewToggle();
+            loadDataSummary();
             
             // Initialize tooltips
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));

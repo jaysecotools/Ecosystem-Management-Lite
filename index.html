@@ -108,6 +108,14 @@
         .view-toggle {
             margin-bottom: 15px;
         }
+        .project-assignment {
+            border-left: 3px solid #0d6efd;
+            padding-left: 10px;
+            margin: 10px 0;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
         @media (max-width: 768px) {
             .sidebar {
                 min-height: auto;
@@ -267,6 +275,7 @@
                                                     <th>Date</th>
                                                     <th>Type</th>
                                                     <th>Description</th>
+                                                    <th>Project</th>
                                                     <th>Status</th>
                                                 </tr>
                                             </thead>
@@ -309,6 +318,9 @@
                                             <th>Code</th>
                                             <th>Status</th>
                                             <th>Start Date</th>
+                                            <th>Assessments</th>
+                                            <th>Maintenance</th>
+                                            <th>Species</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -377,6 +389,13 @@
                             <h5 class="card-title mb-0">Assessment History</h5>
                         </div>
                         <div class="card-body">
+                            <div class="mb-3">
+                                <label for="assessmentProjectFilter" class="form-label">Filter by Project:</label>
+                                <select class="form-select" id="assessmentProjectFilter">
+                                    <option value="all">All Projects</option>
+                                    <!-- Project options will be loaded here -->
+                                </select>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
@@ -384,6 +403,7 @@
                                             <th>Date</th>
                                             <th>Assessor</th>
                                             <th>Health Status</th>
+                                            <th>Project</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -415,15 +435,28 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="healthStatus" class="form-label">Health Status *</label>
-                                    <select class="form-select" id="healthStatus" required>
-                                        <option value="excellent">Excellent</option>
-                                        <option value="good">Good</option>
-                                        <option value="fair">Fair</option>
-                                        <option value="poor">Poor</option>
-                                        <option value="degraded">Degraded</option>
-                                    </select>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="healthStatus" class="form-label">Health Status *</label>
+                                            <select class="form-select" id="healthStatus" required>
+                                                <option value="excellent">Excellent</option>
+                                                <option value="good">Good</option>
+                                                <option value="fair">Fair</option>
+                                                <option value="poor">Poor</option>
+                                                <option value="degraded">Degraded</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="assessmentProject" class="form-label">Project *</label>
+                                            <select class="form-select" id="assessmentProject" required>
+                                                <option value="">Select a project</option>
+                                                <!-- Project options will be loaded here -->
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="assessmentDescription" class="form-label">Description *</label>
@@ -443,6 +476,13 @@
                             <h5 class="card-title mb-0">Species Database</h5>
                         </div>
                         <div class="card-body">
+                            <div class="mb-3">
+                                <label for="speciesProjectFilter" class="form-label">Filter by Project:</label>
+                                <select class="form-select" id="speciesProjectFilter">
+                                    <option value="all">All Projects</option>
+                                    <!-- Project options will be loaded here -->
+                                </select>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
@@ -451,6 +491,7 @@
                                             <th>Scientific Name</th>
                                             <th>Type</th>
                                             <th>Status</th>
+                                            <th>Project</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -508,6 +549,13 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
+                                    <label for="speciesProject" class="form-label">Project *</label>
+                                    <select class="form-select" id="speciesProject" required>
+                                        <option value="">Select a project</option>
+                                        <!-- Project options will be loaded here -->
+                                    </select>
+                                </div>
+                                <div class="mb-3">
                                     <label for="speciesDescription" class="form-label">Description *</label>
                                     <textarea class="form-control" id="speciesDescription" rows="3" required></textarea>
                                 </div>
@@ -537,6 +585,13 @@
                                 <h5 class="card-title mb-0">Scheduled Maintenance</h5>
                             </div>
                             <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="maintenanceProjectFilter" class="form-label">Filter by Project:</label>
+                                    <select class="form-select" id="maintenanceProjectFilter">
+                                        <option value="all">All Projects</option>
+                                        <!-- Project options will be loaded here -->
+                                    </select>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
@@ -546,6 +601,7 @@
                                                 <th>Scheduled Date</th>
                                                 <th>Status</th>
                                                 <th>Priority</th>
+                                                <th>Project</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -618,6 +674,13 @@
                                             </select>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="maintenanceProject" class="form-label">Project *</label>
+                                    <select class="form-select" id="maintenanceProject" required>
+                                        <option value="">Select a project</option>
+                                        <!-- Project options will be loaded here -->
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="maintenanceDescription" class="form-label">Description *</label>
@@ -873,6 +936,41 @@
             bsToast.show();
         }
 
+        function loadProjectSelects() {
+            const projects = db.getProjects();
+            const projectSelects = document.querySelectorAll('#assessmentProject, #speciesProject, #maintenanceProject, #assessmentProjectFilter, #speciesProjectFilter, #maintenanceProjectFilter');
+            
+            projectSelects.forEach(select => {
+                const isFilter = select.id.includes('Filter');
+                const currentValue = select.value;
+                
+                // Clear existing options except the first one
+                while(select.options.length > (isFilter ? 1 : 1)) {
+                    select.remove(1);
+                }
+                
+                // Add project options
+                projects.forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project.id;
+                    option.textContent = project.name;
+                    select.appendChild(option);
+                });
+                
+                // Try to restore previous selection
+                if (currentValue && Array.from(select.options).some(opt => opt.value === currentValue)) {
+                    select.value = currentValue;
+                }
+            });
+        }
+
+        function getProjectName(projectId) {
+            if (!projectId) return 'Unassigned';
+            const projects = db.getProjects();
+            const project = projects.find(p => p.id === projectId);
+            return project ? project.name : 'Unknown Project';
+        }
+
         function loadDashboard() {
             // Update counts
             document.getElementById('projects-count').textContent = db.getProjects().length;
@@ -887,7 +985,7 @@
             activitiesTable.innerHTML = '';
             
             if (recentActivities.length === 0) {
-                activitiesTable.innerHTML = '<tr><td colspan="4" class="text-center">No activities recorded</td></tr>';
+                activitiesTable.innerHTML = '<tr><td colspan="5" class="text-center">No activities recorded</td></tr>';
             } else {
                 recentActivities.forEach(activity => {
                     const row = activitiesTable.insertRow();
@@ -895,6 +993,7 @@
                         <td>${formatDate(activity.date)}</td>
                         <td>Assessment</td>
                         <td>${activity.description.substring(0, 50)}...</td>
+                        <td>${getProjectName(activity.projectId)}</td>
                         <td><span class="badge ${getHealthBadgeClass(activity.health)}">${activity.health.charAt(0).toUpperCase() + activity.health.slice(1)}</span></td>
                     `;
                 });
@@ -917,7 +1016,7 @@
                     const itemElement = document.createElement('div');
                     itemElement.className = `maintenance-item ${getMaintenanceStatusClass(item)}`;
                     itemElement.innerHTML = `
-                        <h6>${item.activity}</h6>
+                        <h6>${item.activity} (${getProjectName(item.projectId)})</h6>
                         <p class="mb-1">${formatDate(item.date)} - ${item.type.replace('-', ' ').toUpperCase()}</p>
                         <span class="badge ${getPriorityBadgeClass(item.priority)}">${item.priority.toUpperCase()}</span>
                     `;
@@ -932,37 +1031,57 @@
             projectsTable.innerHTML = '';
             
             if (projects.length === 0) {
-                projectsTable.innerHTML = '<tr><td colspan="5" class="text-center">No projects created yet</td></tr>';
+                projectsTable.innerHTML = '<tr><td colspan="8" class="text-center">No projects created yet</td></tr>';
             } else {
                 projects.forEach(project => {
+                    // Count related items
+                    const assessments = db.getAssessments().filter(a => a.projectId === project.id).length;
+                    const maintenance = db.getMaintenance().filter(m => m.projectId === project.id).length;
+                    const species = db.getSpecies().filter(s => s.projectId === project.id).length;
+                    
                     const row = projectsTable.insertRow();
                     row.innerHTML = `
                         <td>${project.name}</td>
                         <td>${project.code || '-'}</td>
                         <td><span class="badge ${getProjectStatusBadgeClass(project.status)}">${project.status.charAt(0).toUpperCase() + project.status.slice(1)}</span></td>
                         <td>${formatDate(project.startDate)}</td>
+                        <td>${assessments}</td>
+                        <td>${maintenance}</td>
+                        <td>${species}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-danger" onclick="deleteProject('${project.id}')">Delete</button>
                         </td>
                     `;
                 });
             }
+            
+            // Update project selects in other forms
+            loadProjectSelects();
         }
 
         function loadAssessments() {
             const assessments = db.getAssessments();
+            const projectFilter = document.getElementById('assessmentProjectFilter').value;
+            
+            // Filter assessments if a specific project is selected
+            let filteredAssessments = assessments;
+            if (projectFilter !== 'all') {
+                filteredAssessments = assessments.filter(a => a.projectId === projectFilter);
+            }
+            
             const assessmentsTable = document.getElementById('assessments-table');
             assessmentsTable.innerHTML = '';
             
-            if (assessments.length === 0) {
-                assessmentsTable.innerHTML = '<tr><td colspan="4" class="text-center">No assessments recorded</td></tr>';
+            if (filteredAssessments.length === 0) {
+                assessmentsTable.innerHTML = '<tr><td colspan="5" class="text-center">No assessments recorded</td></tr>';
             } else {
-                assessments.forEach(assessment => {
+                filteredAssessments.forEach(assessment => {
                     const row = assessmentsTable.insertRow();
                     row.innerHTML = `
                         <td>${formatDate(assessment.date)}</td>
                         <td>${assessment.assessor}</td>
                         <td><span class="badge ${getHealthBadgeClass(assessment.health)}">${assessment.health.charAt(0).toUpperCase() + assessment.health.slice(1)}</span></td>
+                        <td>${getProjectName(assessment.projectId)}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-danger" onclick="deleteAssessment('${assessment.id}')">Delete</button>
                         </td>
@@ -973,19 +1092,28 @@
 
         function loadSpecies() {
             const species = db.getSpecies();
+            const projectFilter = document.getElementById('speciesProjectFilter').value;
+            
+            // Filter species if a specific project is selected
+            let filteredSpecies = species;
+            if (projectFilter !== 'all') {
+                filteredSpecies = species.filter(s => s.projectId === projectFilter);
+            }
+            
             const speciesTable = document.getElementById('species-table');
             speciesTable.innerHTML = '';
             
-            if (species.length === 0) {
-                speciesTable.innerHTML = '<tr><td colspan="5" class="text-center">No species recorded</td></tr>';
+            if (filteredSpecies.length === 0) {
+                speciesTable.innerHTML = '<tr><td colspan="6" class="text-center">No species recorded</td></tr>';
             } else {
-                species.forEach(s => {
+                filteredSpecies.forEach(s => {
                     const row = speciesTable.insertRow();
                     row.innerHTML = `
                         <td>${s.name}</td>
                         <td>${s.scientificName || '-'}</td>
                         <td>${s.type.charAt(0).toUpperCase() + s.type.slice(1)}</td>
                         <td><span class="badge ${getSpeciesStatusBadgeClass(s.status)}">${s.status.charAt(0).toUpperCase() + s.status.slice(1)}</span></td>
+                        <td>${getProjectName(s.projectId)}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-danger" onclick="deleteSpecies('${s.id}')">Delete</button>
                         </td>
@@ -996,13 +1124,21 @@
 
         function loadMaintenance() {
             const maintenanceItems = db.getMaintenance();
+            const projectFilter = document.getElementById('maintenanceProjectFilter').value;
+            
+            // Filter maintenance if a specific project is selected
+            let filteredMaintenance = maintenanceItems;
+            if (projectFilter !== 'all') {
+                filteredMaintenance = maintenanceItems.filter(m => m.projectId === projectFilter);
+            }
+            
             const maintenanceTable = document.getElementById('maintenance-table');
             maintenanceTable.innerHTML = '';
             
-            if (maintenanceItems.length === 0) {
-                maintenanceTable.innerHTML = '<tr><td colspan="6" class="text-center">No maintenance activities scheduled</td></tr>';
+            if (filteredMaintenance.length === 0) {
+                maintenanceTable.innerHTML = '<tr><td colspan="7" class="text-center">No maintenance activities scheduled</td></tr>';
             } else {
-                maintenanceItems.forEach(item => {
+                filteredMaintenance.forEach(item => {
                     const row = maintenanceTable.insertRow();
                     row.innerHTML = `
                         <td>${item.activity}</td>
@@ -1010,6 +1146,7 @@
                         <td>${formatDate(item.date)}</td>
                         <td><span class="badge ${getMaintenanceStatusBadgeClass(item.status)}">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span></td>
                         <td><span class="badge ${getPriorityBadgeClass(item.priority)}">${item.priority.toUpperCase()}</span></td>
+                        <td>${getProjectName(item.projectId)}</td>
                         <td>
                             ${item.status === 'scheduled' ? 
                                 `<button class="btn btn-sm btn-outline-success me-1" onclick="completeMaintenance('${item.id}')">Complete</button>` : 
@@ -1058,7 +1195,7 @@
                         
                         return {
                             id: item.id,
-                            title: item.activity,
+                            title: `${item.activity} (${getProjectName(item.projectId)})`,
                             start: item.date,
                             allDay: true,
                             backgroundColor: color,
@@ -1067,7 +1204,8 @@
                                 type: item.type,
                                 priority: item.priority,
                                 status: item.status,
-                                description: item.description
+                                description: item.description,
+                                projectId: item.projectId
                             }
                         };
                     });
@@ -1080,6 +1218,7 @@
                     const priorityClass = getPriorityBadgeClass(event.extendedProps.priority);
                     
                     const modalContent = `
+                        <p><strong>Project:</strong> ${getProjectName(event.extendedProps.projectId)}</p>
                         <p><strong>Date:</strong> ${formatDate(event.startStr)}</p>
                         <p><strong>Type:</strong> ${event.extendedProps.type.replace('-', ' ').toUpperCase()}</p>
                         <p><strong>Priority:</strong> <span class="badge ${priorityClass}">${event.extendedProps.priority.toUpperCase()}</span></p>
@@ -1418,6 +1557,7 @@
                 date: document.getElementById('assessmentDate').value,
                 assessor: document.getElementById('assessor').value,
                 health: document.getElementById('healthStatus').value,
+                projectId: document.getElementById('assessmentProject').value,
                 description: document.getElementById('assessmentDescription').value
             };
             
@@ -1435,6 +1575,7 @@
                 scientificName: document.getElementById('scientificName').value,
                 type: document.getElementById('speciesType').value,
                 status: document.getElementById('speciesStatus').value,
+                projectId: document.getElementById('speciesProject').value,
                 description: document.getElementById('speciesDescription').value
             };
             
@@ -1452,6 +1593,7 @@
                 type: document.getElementById('maintenanceType').value,
                 date: document.getElementById('maintenanceDate').value,
                 priority: document.getElementById('maintenancePriority').value,
+                projectId: document.getElementById('maintenanceProject').value,
                 description: document.getElementById('maintenanceDescription').value
             };
             
@@ -1461,12 +1603,43 @@
             showToast('Success', 'Maintenance activity scheduled successfully');
         });
 
+        // Filter handlers
+        document.getElementById('assessmentProjectFilter').addEventListener('change', loadAssessments);
+        document.getElementById('speciesProjectFilter').addEventListener('change', loadSpecies);
+        document.getElementById('maintenanceProjectFilter').addEventListener('change', loadMaintenance);
+
         // Delete functions
         function deleteProject(id) {
-            if (confirm('Are you sure you want to delete this project?')) {
+            if (confirm('Are you sure you want to delete this project? This will also delete all associated assessments, species, and maintenance activities.')) {
+                // Delete associated items
+                const assessments = db.getAssessments();
+                assessments.forEach(assessment => {
+                    if (assessment.projectId === id) {
+                        db.deleteAssessment(assessment.id);
+                    }
+                });
+                
+                const species = db.getSpecies();
+                species.forEach(s => {
+                    if (s.projectId === id) {
+                        db.deleteSpecies(s.id);
+                    }
+                });
+                
+                const maintenance = db.getMaintenance();
+                maintenance.forEach(item => {
+                    if (item.projectId === id) {
+                        db.deleteMaintenance(item.id);
+                    }
+                });
+                
+                // Delete the project
                 db.deleteProject(id);
                 loadProjects();
-                showToast('Success', 'Project deleted successfully');
+                loadAssessments();
+                loadSpecies();
+                loadMaintenance();
+                showToast('Success', 'Project and all associated items deleted successfully');
             }
         }
 
@@ -1635,6 +1808,7 @@
         function initApp() {
             db.init();
             loadDashboard();
+            loadProjectSelects();
             setupViewToggle();
         }
 

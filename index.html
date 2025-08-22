@@ -6,6 +6,7 @@
     <title>Ecosystem Manager Lite</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .sidebar {
@@ -92,6 +93,21 @@
         .maintenance-overdue {
             border-left-color: #dc3545;
         }
+        .calendar-view {
+            display: none;
+        }
+        .calendar-view.active {
+            display: block;
+        }
+        .list-view.active {
+            display: block;
+        }
+        .fc-event {
+            cursor: pointer;
+        }
+        .view-toggle {
+            margin-bottom: 15px;
+        }
         @media (max-width: 768px) {
             .sidebar {
                 min-height: auto;
@@ -132,6 +148,13 @@
             .main-content {
                 padding: 1rem;
                 margin-bottom: 60px;
+            }
+            .fc-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .fc-toolbar .fc-center {
+                margin: 10px 0;
             }
         }
     </style>
@@ -497,27 +520,52 @@
                 <!-- Maintenance Section -->
                 <div id="maintenance" class="content-section">
                     <h2 class="mb-4">Maintenance Activities</h2>
-                    <div class="card">
-                        <div class="card-header bg-white">
-                            <h5 class="card-title mb-0">Scheduled Maintenance</h5>
+                    
+                    <div class="view-toggle btn-group mb-3" role="group">
+                        <button type="button" class="btn btn-outline-primary active" data-view="list-view">
+                            <i class="bi bi-list-ul"></i> List View
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-view="calendar-view">
+                            <i class="bi bi-calendar-event"></i> Calendar View
+                        </button>
+                    </div>
+                    
+                    <!-- List View -->
+                    <div id="list-view" class="list-view active">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="card-title mb-0">Scheduled Maintenance</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Activity</th>
+                                                <th>Type</th>
+                                                <th>Scheduled Date</th>
+                                                <th>Status</th>
+                                                <th>Priority</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="maintenance-table">
+                                            <!-- Maintenance activities will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Activity</th>
-                                            <th>Type</th>
-                                            <th>Scheduled Date</th>
-                                            <th>Status</th>
-                                            <th>Priority</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="maintenance-table">
-                                        <!-- Maintenance activities will be loaded here -->
-                                    </tbody>
-                                </table>
+                    </div>
+                    
+                    <!-- Calendar View -->
+                    <div id="calendar-view" class="calendar-view">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="card-title mb-0">Maintenance Calendar</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="calendar"></div>
                             </div>
                         </div>
                     </div>
@@ -659,6 +707,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
     <script>
         // Simple database using localStorage
         const db = {
@@ -764,6 +813,9 @@
                 localStorage.setItem('maintenance', JSON.stringify(maintenanceItems));
             }
         };
+
+        // Calendar instance
+        let calendar = null;
 
         // Chart instances
         let projectStatusChart = null;
@@ -955,6 +1007,112 @@
                     `;
                 });
             }
+            
+            // Also update the calendar if it exists
+            if (calendar) {
+                calendar.refetchEvents();
+            }
+        }
+
+        function loadCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            
+            if (calendar) {
+                calendar.destroy();
+            }
+            
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: function(fetchInfo, successCallback, failureCallback) {
+                    const maintenanceItems = db.getMaintenance();
+                    const events = maintenanceItems.map(item => {
+                        let color;
+                        switch(item.priority) {
+                            case 'high': color = '#dc3545'; break;
+                            case 'medium': color = '#ffc107'; break;
+                            default: color = '#28a745';
+                        }
+                        
+                        if (item.status === 'completed') {
+                            color = '#6c757d';
+                        } else if (item.status === 'overdue') {
+                            color = '#dc3545';
+                        }
+                        
+                        return {
+                            id: item.id,
+                            title: item.activity,
+                            start: item.date,
+                            allDay: true,
+                            backgroundColor: color,
+                            borderColor: color,
+                            extendedProps: {
+                                type: item.type,
+                                priority: item.priority,
+                                status: item.status,
+                                description: item.description
+                            }
+                        };
+                    });
+                    
+                    successCallback(events);
+                },
+                eventClick: function(info) {
+                    const event = info.event;
+                    const statusClass = getMaintenanceStatusBadgeClass(event.extendedProps.status);
+                    const priorityClass = getPriorityBadgeClass(event.extendedProps.priority);
+                    
+                    const modalContent = `
+                        <div class="modal-header">
+                            <h5 class="modal-title">${event.title}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Date:</strong> ${formatDate(event.startStr)}</p>
+                            <p><strong>Type:</strong> ${event.extendedProps.type.replace('-', ' ').toUpperCase()}</p>
+                            <p><strong>Priority:</strong> <span class="badge ${priorityClass}">${event.extendedProps.priority.toUpperCase()}</span></p>
+                            <p><strong>Status:</strong> <span class="badge ${statusClass}">${event.extendedProps.status.charAt(0).toUpperCase() + event.extendedProps.status.slice(1)}</span></p>
+                            <p><strong>Description:</strong> ${event.extendedProps.description}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            ${event.extendedProps.status === 'scheduled' ? 
+                                `<button type="button" class="btn btn-success" onclick="completeMaintenance('${event.id}'); $('#maintenanceModal').modal('hide');">Mark as Completed</button>` : 
+                                ''}
+                        </div>
+                    `;
+                    
+                    // Create or update modal
+                    let modal = document.getElementById('maintenanceModal');
+                    if (!modal) {
+                        modal = document.createElement('div');
+                        modal.className = 'modal fade';
+                        modal.id = 'maintenanceModal';
+                        modal.tabIndex = -1;
+                        modal.innerHTML = `
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    ${modalContent}
+                                </div>
+                            </div>
+                        `;
+                        document.body.appendChild(modal);
+                    } else {
+                        modal.querySelector('.modal-content').innerHTML = modalContent;
+                    }
+                    
+                    // Show modal
+                    const bsModal = new bootstrap.Modal(modal);
+                    bsModal.show();
+                }
+            });
+            
+            calendar.render();
         }
 
         function loadCharts() {
@@ -1417,6 +1575,35 @@
             return 'maintenance-pending';
         }
 
+        // View toggle functionality
+        function setupViewToggle() {
+            const viewButtons = document.querySelectorAll('.view-toggle button');
+            const views = document.querySelectorAll('#list-view, #calendar-view');
+            
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetView = this.getAttribute('data-view');
+                    
+                    // Update button states
+                    viewButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show/hide views
+                    views.forEach(view => {
+                        view.classList.remove('active');
+                        if (view.id === targetView) {
+                            view.classList.add('active');
+                            
+                            // If switching to calendar view, initialize it
+                            if (targetView === 'calendar-view' && !calendar) {
+                                loadCalendar();
+                            }
+                        }
+                    });
+                });
+            });
+        }
+
         // Navigation
         document.querySelectorAll('.sidebar .nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -1438,7 +1625,11 @@
                 if (target === 'projects') loadProjects();
                 if (target === 'assessments') loadAssessments();
                 if (target === 'species') loadSpecies();
-                if (target === 'maintenance') loadMaintenance();
+                if (target === 'maintenance') {
+                    loadMaintenance();
+                    // Reset to list view when navigating to maintenance
+                    document.querySelector('[data-view="list-view"]').click();
+                }
                 if (target === 'charts') loadCharts();
             });
         });
@@ -1447,6 +1638,7 @@
         function initApp() {
             db.init();
             loadDashboard();
+            setupViewToggle();
         }
 
         // Start the app when the DOM is loaded

@@ -11,83 +11,52 @@
     <!-- jsPDF and html2canvas libraries for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0a7c71;
-            --primary-dark: #065a52;
-            --primary-light: #e6f4f1;
+            --primary: #2c3e50;
             --secondary: #34495e;
             --accent: #16a085;
             --accent-light: #1abc9c;
             --success: #27ae60;
             --warning: #f39c12;
             --danger: #e74c3c;
-            --light: #f8f9fa;
+            --light: #ecf0f1;
             --dark: #2c3e50;
-            --gray-100: #f8f9fa;
-            --gray-200: #e9ecef;
-            --gray-300: #dee2e6;
-            --gray-400: #ced4da;
-            --gray-500: #adb5bd;
-            --gray-600: #6c757d;
-            --gray-700: #495057;
-            --gray-800: #343a40;
-            --gray-900: #212529;
             --sidebar-width: 280px;
             --transition: all 0.3s ease;
-            --border-radius: 12px;
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            --hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        }
-
-        * {
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
-            color: var(--gray-800);
+            color: #2c3e50;
             line-height: 1.6;
-            font-weight: 400;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 600;
-            color: var(--gray-900);
         }
 
         /* Sidebar Styles */
         .sidebar {
             min-height: 100vh;
             width: var(--sidebar-width);
-            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
             color: white;
             position: fixed;
             z-index: 100;
             transition: var(--transition);
-            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.08);
-            padding: 0;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar .nav-link {
             color: rgba(255, 255, 255, 0.85);
-            margin: 4px 16px;
-            border-radius: 10px;
-            padding: 12px 16px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            padding: 12px 15px;
             transition: var(--transition);
             font-weight: 500;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
         }
 
         .sidebar .nav-link:hover, .sidebar .nav-link.active {
             color: white;
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
         }
 
@@ -100,18 +69,17 @@
 
         .logo {
             font-weight: 700;
-            padding: 24px 25px;
-            font-size: 1.5rem;
+            padding: 20px 25px;
+            font-size: 1.4rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             background-color: rgba(0, 0, 0, 0.1);
-            margin-bottom: 8px;
         }
 
         .logo i {
-            margin-right: 12px;
-            color: white;
-            font-size: 1.8rem;
+            margin-right: 10px;
+            color: var(--accent-light);
         }
 
         /* Main Content */
@@ -119,145 +87,99 @@
             margin-left: var(--sidebar-width);
             padding: 30px;
             transition: var(--transition);
-            background-color: var(--gray-100);
-            min-height: 100vh;
         }
 
         .section-header {
-            margin-bottom: 32px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--gray-300);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .section-header h2 {
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
         }
 
         /* Card Styles */
         .card {
             margin-bottom: 25px;
             border: none;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             transition: var(--transition);
-            overflow: hidden;
         }
 
         .card:hover {
-            box-shadow: var(--hover-shadow);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
             transform: translateY(-5px);
         }
 
         .card-header {
             background-color: white;
-            border-bottom: 1px solid var(--gray-200);
-            padding: 18px 24px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 15px 20px;
             font-weight: 600;
-            color: var(--primary-dark);
-            border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
-            font-size: 1.1rem;
+            color: var(--primary);
+            border-radius: 12px 12px 0 0 !important;
         }
 
         .stat-card {
             text-align: center;
-            padding: 24px;
-            border-left: 4px solid var(--primary);
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            background-color: var(--primary-light);
+            padding: 20px;
+            border-left: 4px solid var(--accent);
         }
 
         .stat-card h3 {
             font-size: 2.2rem;
             font-weight: 700;
             margin: 10px 0;
-            color: var(--primary);
         }
 
         .stat-card .card-title {
-            color: var(--gray-700);
+            color: var(--secondary);
             font-weight: 600;
-            font-size: 0.95rem;
         }
 
         /* Table Styles */
-        .table {
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
         .table th {
             font-weight: 600;
-            color: var(--gray-700);
+            color: var(--primary);
             border-top: none;
-            background-color: var(--gray-100);
-            padding: 16px;
-            font-size: 0.9rem;
-            border-bottom: 2px solid var(--gray-300);
-        }
-
-        .table td {
-            padding: 16px;
-            vertical-align: middle;
-            border-top: 1px solid var(--gray-200);
         }
 
         .table-hover tbody tr:hover {
-            background-color: rgba(10, 124, 113, 0.05);
+            background-color: rgba(22, 160, 133, 0.05);
         }
 
         /* Form Styles */
         .form-control, .form-select {
-            padding: 12px 16px;
-            border-radius: 10px;
-            border: 1px solid var(--gray-300);
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
             transition: var(--transition);
-            font-size: 0.95rem;
         }
 
         .form-control:focus, .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 0.25rem rgba(10, 124, 113, 0.15);
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: var(--gray-700);
-            margin-bottom: 8px;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(22, 160, 133, 0.25);
         }
 
         .btn {
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 10px 20px;
             font-weight: 500;
             transition: var(--transition);
-            font-size: 0.95rem;
         }
 
         .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
+            background-color: var(--accent);
+            border-color: var(--accent);
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
+            background-color: var(--accent-light);
+            border-color: var(--accent-light);
             transform: translateY(-2px);
-        }
-
-        .btn-outline-primary {
-            color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .btn-outline-primary:hover {
-            background-color: var(--primary);
-            border-color: var(--primary);
-            color: white;
         }
 
         /* Badge Styles */
@@ -265,7 +187,6 @@
             padding: 8px 12px;
             border-radius: 20px;
             font-weight: 500;
-            font-size: 0.8rem;
         }
 
         /* Chart Containers */
@@ -277,16 +198,14 @@
 
         /* Maintenance Items */
         .maintenance-item {
-            border-left: 4px solid var(--gray-400);
-            padding: 16px;
-            margin-bottom: 16px;
+            border-left: 4px solid #6c757d;
+            padding-left: 15px;
+            margin-bottom: 15px;
             transition: var(--transition);
-            border-radius: 8px;
-            background-color: white;
         }
 
         .maintenance-item:hover {
-            background-color: var(--gray-100);
+            background-color: rgba(0, 0, 0, 0.02);
         }
 
         .maintenance-pending {
@@ -301,6 +220,14 @@
             border-left-color: var(--danger);
         }
 
+        .list-view, .calendar-view {
+            display: none;
+        }
+
+        .list-view.active, .calendar-view.active {
+            display: block;
+        }
+
         /* Toast Notification */
         .toast-container {
             position: fixed;
@@ -309,24 +236,15 @@
             z-index: 1100;
         }
 
-        .toast {
-            border-radius: 12px;
-            box-shadow: var(--hover-shadow);
-        }
-
         /* View Toggle */
         .view-toggle {
             margin-bottom: 20px;
         }
 
-        .view-toggle .btn {
-            border-radius: 8px;
-        }
-
         /* Content Sections */
         .content-section {
             display: none;
-            animation: fadeIn 0.4s ease;
+            animation: fadeIn 0.5s ease;
         }
 
         .content-section.active {
@@ -359,54 +277,19 @@
             background-color: var(--danger);
         }
 
-        /* Modal Styles */
-        .modal-content {
-            border-radius: 16px;
-            border: none;
-            box-shadow: var(--hover-shadow);
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
         }
 
-        .modal-header {
-            border-bottom: 1px solid var(--gray-200);
-            padding: 20px 24px;
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .modal-footer {
-            border-top: 1px solid var(--gray-200);
-            padding: 20px 24px;
-        }
-
-        /* Calendar Styles */
-        .fc {
-            --fc-border-color: var(--gray-200);
-            --fc-today-bg-color: rgba(10, 124, 113, 0.1);
-            --fc-page-bg-color: white;
-            --fc-neutral-bg-color: white;
-        }
-
-        .fc .fc-toolbar-title {
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-
-        .fc .fc-button {
-            border-radius: 8px;
-            padding: 8px 16px;
-            font-weight: 500;
-        }
-
-        .fc .fc-button-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .fc .fc-button-primary:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Mobile Responsiveness */
@@ -503,11 +386,11 @@
 
         /* Accessibility Improvements */
         .btn:focus, .form-control:focus, .form-select:focus {
-            box-shadow: 0 0 0 3px rgba(10, 124, 113, 0.3);
+            box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.5);
         }
         
         .nav-link:focus {
-            outline: 2px solid var(--primary-light);
+            outline: 2px solid var(--accent-light);
             outline-offset: -2px;
         }
         
@@ -518,7 +401,7 @@
             }
             
             .card {
-                border: 1px solid var(--gray-300);
+                border: 1px solid #ddd;
             }
         }
         
@@ -530,51 +413,21 @@
             }
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        /* Calendar customization */
+        .fc-event {
+            cursor: pointer;
         }
 
-        ::-webkit-scrollbar-track {
-            background: var(--gray-100);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--gray-400);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gray-500);
-        }
-
-        /* Data cards in summary */
-        .data-summary-card {
+        .empty-state {
             text-align: center;
-            padding: 20px;
-            border-radius: 12px;
-            background: white;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
+            padding: 2rem;
+            color: #6c757d;
         }
 
-        .data-summary-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--hover-shadow);
-        }
-
-        .data-summary-card h4 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .data-summary-card p {
-            color: var(--gray-600);
-            margin-bottom: 0;
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
         }
     </style>
 </head>
@@ -737,6 +590,9 @@
                                             </thead>
                                             <tbody id="recent-activities">
                                                 <!-- Activities will be loaded here -->
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No activities recorded</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -751,6 +607,7 @@
                                 <div class="card-body">
                                     <div id="upcoming-maintenance">
                                         <!-- Upcoming maintenance will be loaded here -->
+                                        <p class="text-center">No upcoming maintenance</p>
                                     </div>
                                 </div>
                             </div>
@@ -786,6 +643,9 @@
                                     </thead>
                                     <tbody id="projects-table">
                                         <!-- Projects will be loaded here -->
+                                        <tr>
+                                            <td colspan="8" class="text-center">No projects created yet</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -873,6 +733,9 @@
                                     </thead>
                                     <tbody id="assessments-table">
                                         <!-- Assessments will be loaded here -->
+                                        <tr>
+                                                    <td colspan="5" class="text-center">No assessments recorded</td>
+                                                </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -965,6 +828,9 @@
                                     </thead>
                                     <tbody id="species-table">
                                         <!-- Species will be loaded here -->
+                                        <tr>
+                                                    <td colspan="6" class="text-center">No species recorded</td>
+                                                </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -986,9 +852,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="scientificName" class="form-label">Scientific Name</label>
-                                            <input type="text" class="form-control" id="scientificName">
-                                        </div>
+                            <label for="scientificName" class="form-label">Scientific Name</label>
+                            <input type="text" class="form-control" id="scientificName">
+                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -1078,6 +944,9 @@
                                         </thead>
                                         <tbody id="maintenance-table">
                                             <!-- Maintenance activities will be loaded here -->
+                                            <tr>
+                                                <td colspan="7" class="text-center">No maintenance activities scheduled</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1157,7 +1026,7 @@
                                     <label for="maintenanceDescription" class="form-label">Description *</label>
                                     <textarea class="form-control" id="maintenanceDescription" rows="3" required></textarea>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Schedule Activity</button>
+                                <button type="submit", class="btn btn-primary">Schedule Activity</button>
                             </form>
                         </div>
                     </div>
@@ -1178,7 +1047,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-container">
-                                        <canvas id="projectStatusChart"></canvas>
+                                        <canvas id="analyticsProjectStatusChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -1190,7 +1059,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-container">
-                                        <canvas id="healthTrendChart"></canvas>
+                                        <canvas id="analyticsHealthTrendChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -1205,7 +1074,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-container">
-                                        <canvas id="speciesTypeChart"></canvas>
+                                        <canvas id="analyticsSpeciesTypeChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -1217,7 +1086,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-container">
-                                        <canvas id="maintenanceTypeChart"></canvas>
+                                        <canvas id="analyticsMaintenanceTypeChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -1232,7 +1101,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="chart-container" style="height: 400px;">
-                                        <canvas id="monthlyActivityChart"></canvas>
+                                        <canvas id="analyticsMonthlyActivityChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -1314,27 +1183,27 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3 col-6">
-                                    <div class="data-summary-card">
+                                    <div class="text-center p-3 border rounded">
                                         <h4 id="data-projects-count">0</h4>
-                                        <p>Projects</p>
+                                        <p class="mb-0">Projects</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6">
-                                    <div class="data-summary-card">
+                                    <div class="text-center p-3 border rounded">
                                         <h4 id="data-assessments-count">0</h4>
-                                        <p>Assessments</p>
+                                        <p class="mb-0">Assessments</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6">
-                                    <div class="data-summary-card">
+                                    <div class="text-center p-3 border rounded">
                                         <h4 id="data-species-count">0</h4>
-                                        <p>Species</p>
+                                        <p class="mb-0">Species</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6">
-                                    <div class="data-summary-card">
+                                    <div class="text-center p-3 border rounded">
                                         <h4 id="data-maintenance-count">0</h4>
-                                        <p>Maintenance Tasks</p>
+                                        <p class="mb-0">Maintenance Tasks</p>
                                     </div>
                                 </div>
                             </div>
@@ -1373,105 +1242,195 @@
         // Simple database using localStorage
         const db = {
             init: function() {
-                if (!localStorage.getItem('projects')) {
-                    localStorage.setItem('projects', JSON.stringify([]));
-                }
-                if (!localStorage.getItem('assessments')) {
-                    localStorage.setItem('assessments', JSON.stringify([]));
-                }
-                if (!localStorage.getItem('species')) {
-                    localStorage.setItem('species', JSON.stringify([]));
-                }
-                if (!localStorage.getItem('maintenance')) {
-                    localStorage.setItem('maintenance', JSON.stringify([]));
+                try {
+                    if (!localStorage.getItem('projects')) {
+                        localStorage.setItem('projects', JSON.stringify([]));
+                    }
+                    if (!localStorage.getItem('assessments')) {
+                        localStorage.setItem('assessments', JSON.stringify([]));
+                    }
+                    if (!localStorage.getItem('species')) {
+                        localStorage.setItem('species', JSON.stringify([]));
+                    }
+                    if (!localStorage.getItem('maintenance')) {
+                        localStorage.setItem('maintenance', JSON.stringify([]));
+                    }
+                    return true;
+                } catch (error) {
+                    console.error('Failed to initialize database:', error);
+                    showToast('Storage Error', 'Failed to initialize storage. Please check if localStorage is available.', 'error');
+                    return false;
                 }
             },
             
             getProjects: function() {
-                return JSON.parse(localStorage.getItem('projects') || '[]');
+                try {
+                    return JSON.parse(localStorage.getItem('projects') || '[]');
+                } catch (error) {
+                    console.error('Failed to get projects:', error);
+                    showToast('Error', 'Failed to load projects', 'error');
+                    return [];
+                }
             },
             
             saveProject: function(project) {
-                const projects = this.getProjects();
-                project.id = Date.now().toString();
-                projects.push(project);
-                localStorage.setItem('projects', JSON.stringify(projects));
-                return project;
+                try {
+                    const projects = this.getProjects();
+                    project.id = Date.now().toString();
+                    projects.push(project);
+                    localStorage.setItem('projects', JSON.stringify(projects));
+                    return project;
+                } catch (error) {
+                    console.error('Failed to save project:', error);
+                    showToast('Error', 'Failed to save project', 'error');
+                    return null;
+                }
             },
             
             deleteProject: function(id) {
-                let projects = this.getProjects();
-                projects = projects.filter(p => p.id !== id);
-                localStorage.setItem('projects', JSON.stringify(projects));
+                try {
+                    let projects = this.getProjects();
+                    projects = projects.filter(p => p.id !== id);
+                    localStorage.setItem('projects', JSON.stringify(projects));
+                    return true;
+                } catch (error) {
+                    console.error('Failed to delete project:', error);
+                    showToast('Error', 'Failed to delete project', 'error');
+                    return false;
+                }
             },
             
             getAssessments: function() {
-                return JSON.parse(localStorage.getItem('assessments') || '[]');
+                try {
+                    return JSON.parse(localStorage.getItem('assessments') || '[]');
+                } catch (error) {
+                    console.error('Failed to get assessments:', error);
+                    showToast('Error', 'Failed to load assessments', 'error');
+                    return [];
+                }
             },
             
             saveAssessment: function(assessment) {
-                const assessments = this.getAssessments();
-                assessment.id = Date.now().toString();
-                assessments.push(assessment);
-                localStorage.setItem('assessments', JSON.stringify(assessments));
-                return assessment;
+                try {
+                    const assessments = this.getAssessments();
+                    assessment.id = Date.now().toString();
+                    assessments.push(assessment);
+                    localStorage.setItem('assessments', JSON.stringify(assessments));
+                    return assessment;
+                } catch (error) {
+                    console.error('Failed to save assessment:', error);
+                    showToast('Error', 'Failed to save assessment', 'error');
+                    return null;
+                }
             },
             
             deleteAssessment: function(id) {
-                let assessments = this.getAssessments();
-                assessments = assessments.filter(a => a.id !== id);
-                localStorage.setItem('assessments', JSON.stringify(assessments));
+                try {
+                    let assessments = db.getAssessments();
+                    assessments = assessments.filter(a => a.id !== id);
+                    localStorage.setItem('assessments', JSON.stringify(assessments));
+                    return true;
+                } catch (error) {
+                    console.error('Failed to delete assessment:', error);
+                    showToast('Error', 'Failed to delete assessment', 'error');
+                    return false;
+                }
             },
             
             getSpecies: function() {
-                return JSON.parse(localStorage.getItem('species') || '[]');
+                try {
+                    return JSON.parse(localStorage.getItem('species') || '[]');
+                } catch (error) {
+                    console.error('Failed to get species:', error);
+                    showToast('Error', 'Failed to load species', 'error');
+                    return [];
+                }
             },
             
             saveSpecies: function(species) {
-                const allSpecies = this.getSpecies();
-                species.id = Date.now().toString();
-                allSpecies.push(species);
-                localStorage.setItem('species', JSON.stringify(allSpecies));
-                return species;
+                try {
+                    const allSpecies = this.getSpecies();
+                    species.id = Date.now().toString();
+                    allSpecies.push(species);
+                    localStorage.setItem('species', JSON.stringify(allSpecies));
+                    return species;
+                } catch (error) {
+                    console.error('Failed to save species:', error);
+                    showToast('Error', 'Failed to save species', 'error');
+                    return null;
+                }
             },
             
             deleteSpecies: function(id) {
-                let allSpecies = this.getSpecies();
-                allSpecies = allSpecies.filter(s => s.id !== id);
-                localStorage.setItem('species', JSON.stringify(allSpecies));
+                try {
+                    let allSpecies = db.getSpecies();
+                    allSpecies = allSpecies.filter(s => s.id !== id);
+                    localStorage.setItem('species', JSON.stringify(allSpecies));
+                    return true;
+                } catch (error) {
+                    console.error('Failed to delete species:', error);
+                    showToast('Error', 'Failed to delete species', 'error');
+                    return false;
+                }
             },
             
             getMaintenance: function() {
-                return JSON.parse(localStorage.getItem('maintenance') || '[]');
+                try {
+                    return JSON.parse(localStorage.getItem('maintenance') || '[]');
+                } catch (error) {
+                    console.error('Failed to get maintenance:', error);
+                    showToast('Error', 'Failed to load maintenance activities', 'error');
+                    return [];
+                }
             },
             
             saveMaintenance: function(maintenance) {
-                const maintenanceItems = this.getMaintenance();
-                maintenance.id = Date.now().toString();
-                maintenance.status = 'scheduled';
-                maintenanceItems.push(maintenance);
-                localStorage.setItem('maintenance', JSON.stringify(maintenanceItems));
-                return maintenance;
+                try {
+                    const maintenanceItems = this.getMaintenance();
+                    maintenance.id = Date.now().toString();
+                    maintenance.status = 'scheduled';
+                    maintenanceItems.push(maintenance);
+                    localStorage.setItem('maintenance', JSON.stringify(maintenanceItems));
+                    return maintenance;
+                } catch (error) {
+                    console.error('Failed to save maintenance:', error);
+                    showToast('Error', 'Failed to save maintenance activity', 'error');
+                    return null;
+                }
             },
             
             updateMaintenanceStatus: function(id, status) {
-                let maintenanceItems = this.getMaintenance();
-                maintenanceItems = maintenanceItems.map(item => {
-                    if (item.id === id) {
-                        item.status = status;
-                        if (status === 'completed') {
-                            item.completedDate = new Date().toISOString().split('T')[0];
+                try {
+                    let maintenanceItems = this.getMaintenance();
+                    maintenanceItems = maintenanceItems.map(item => {
+                        if (item.id === id) {
+                            item.status = status;
+                            if (status === 'completed') {
+                                item.completedDate = new Date().toISOString().split('T')[0];
+                            }
                         }
-                    }
-                    return item;
-                });
-                localStorage.setItem('maintenance', JSON.stringify(maintenanceItems));
+                        return item;
+                    });
+                    localStorage.setItem('maintenance', JSON.stringify(maintenanceItems));
+                    return true;
+                } catch (error) {
+                    console.error('Failed to update maintenance status:', error);
+                    showToast('Error', 'Failed to update maintenance status', 'error');
+                    return false;
+                }
             },
             
             deleteMaintenance: function(id) {
-                let maintenanceItems = this.getMaintenance();
-                maintenanceItems = maintenanceItems.filter(m => m.id !== id);
-                localStorage.setItem('maintenance', JSON.stringify(maintenanceItems));
+                try {
+                    let maintenanceItems = this.getMaintenance();
+                    maintenanceItems = maintenanceItems.filter(m => m.id !== id);
+                    localStorage.setItem('maintenance', JSON.stringify(maintenanceItems));
+                    return true;
+                } catch (error) {
+                    console.error('Failed to delete maintenance:', error);
+                    showToast('Error', 'Failed to delete maintenance activity', 'error');
+                    return false;
+                }
             }
         };
 
@@ -1484,6 +1443,13 @@
         let speciesTypeChart = null;
         let maintenanceTypeChart = null;
         let monthlyActivityChart = null;
+        
+        // Analytics chart instances
+        let analyticsProjectStatusChart = null;
+        let analyticsHealthTrendChart = null;
+        let analyticsSpeciesTypeChart = null;
+        let analyticsMaintenanceTypeChart = null;
+        let analyticsMonthlyActivityChart = null;
 
         // UI Functions
         function showToast(title, message, type = 'success') {
@@ -1550,6 +1516,21 @@
             return project ? project.name : 'Unknown Project';
         }
 
+        function updateMaintenanceStatuses() {
+            const maintenanceItems = db.getMaintenance();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            maintenanceItems.forEach(item => {
+                const scheduledDate = new Date(item.date);
+                scheduledDate.setHours(0, 0, 0, 0);
+                
+                if (item.status === 'scheduled' && scheduledDate < today) {
+                    db.updateMaintenanceStatus(item.id, 'overdue');
+                }
+            });
+        }
+
         function loadDashboard() {
             // Update counts
             document.getElementById('projects-count').textContent = db.getProjects().length;
@@ -1579,6 +1560,7 @@
             }
             
             // Load upcoming maintenance
+            updateMaintenanceStatuses();
             const maintenanceItems = db.getMaintenance();
             const upcomingMaintenance = maintenanceItems
                 .filter(item => item.status === 'scheduled')
@@ -1705,6 +1687,7 @@
         }
 
         function loadMaintenance() {
+            updateMaintenanceStatuses();
             const maintenanceItems = db.getMaintenance();
             const projectFilter = document.getElementById('maintenanceProjectFilter').value;
             
@@ -1818,7 +1801,8 @@
                         completeButton.style.display = 'block';
                         completeButton.onclick = function() {
                             completeMaintenance(event.id);
-                            $('#maintenanceModal').modal('hide');
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('maintenanceModal'));
+                            modal.hide();
                         };
                     } else {
                         completeButton.style.display = 'none';
@@ -1835,11 +1819,17 @@
 
         function loadCharts() {
             // Destroy existing charts if they exist
-            if (projectStatusChart) projectStatusChart.destroy();
-            if (healthTrendChart) healthTrendChart.destroy();
-            if (speciesTypeChart) speciesTypeChart.destroy();
-            if (maintenanceTypeChart) maintenanceTypeChart.destroy();
-            if (monthlyActivityChart) monthlyActivityChart.destroy();
+            const destroyChart = (chart) => {
+                if (chart) {
+                    chart.destroy();
+                }
+            };
+            
+            destroyChart(projectStatusChart);
+            destroyChart(healthTrendChart);
+            destroyChart(speciesTypeChart);
+            destroyChart(maintenanceTypeChart);
+            destroyChart(monthlyActivityChart);
             
             // Load data
             const projects = db.getProjects();
@@ -1870,7 +1860,8 @@
                 key.charAt(0).toUpperCase() + key.slice(1)
             );
             
-            projectStatusChart = new Chart(document.getElementById('projectStatusChart'), {
+            const projectStatusCtx = document.getElementById('projectStatusChart').getContext('2d');
+            projectStatusChart = new Chart(projectStatusCtx, {
                 type: 'doughnut',
                 data: {
                     labels: projectStatusLabels,
@@ -1901,7 +1892,8 @@
                 'degraded': 1
             };
             
-            healthTrendChart = new Chart(document.getElementById('healthTrendChart'), {
+            const healthTrendCtx = document.getElementById('healthTrendChart').getContext('2d');
+            healthTrendChart = new Chart(healthTrendCtx, {
                 type: 'line',
                 data: {
                     labels: sortedAssessments.map(a => formatDate(a.date, 'short')),
@@ -1962,7 +1954,8 @@
                 speciesTypeData[s.type]++;
             });
             
-            speciesTypeChart = new Chart(document.getElementById('speciesTypeChart'), {
+            const speciesTypeCtx = document.getElementById('speciesTypeChart').getContext('2d');
+            speciesTypeChart = new Chart(speciesTypeCtx, {
                 type: 'pie',
                 data: {
                     labels: Object.keys(speciesTypeData).map(key => 
@@ -2012,7 +2005,8 @@
             // Filter out types with zero count
             const filteredMaintenanceTypes = Object.keys(maintenanceTypeData).filter(key => maintenanceTypeData[key] > 0);
             
-            maintenanceTypeChart = new Chart(document.getElementById('maintenanceTypeChart'), {
+            const maintenanceTypeCtx = document.getElementById('maintenanceTypeChart').getContext('2d');
+            maintenanceTypeChart = new Chart(maintenanceTypeCtx, {
                 type: 'bar',
                 data: {
                     labels: filteredMaintenanceTypes.map(key => 
@@ -2022,7 +2016,7 @@
                         label: 'Number of Activities',
                         data: filteredMaintenanceTypes.map(key => maintenanceTypeData[key]),
                         backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                        borderColor: 'rgade(54, 162, 235, 1)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
                     }]
                 },
@@ -2066,7 +2060,7 @@
                 if (monthlyData[monthKey]) {
                     monthlyData[monthKey].assessments++;
                 }
-            }
+            });
             
             // Count maintenance by month
             maintenance.forEach(item => {
@@ -2078,7 +2072,306 @@
                 }
             });
             
-            monthlyActivityChart = new Chart(document.getElementById('monthlyActivityChart'), {
+            const monthlyActivityCtx = document.getElementById('monthlyActivityChart').getContext('2d');
+            monthlyActivityChart = new Chart(monthlyActivityCtx, {
+                type: 'bar',
+                data: {
+                    labels: lastSixMonths.map(key => monthlyData[key].label),
+                    datasets: [
+                        {
+                            label: 'Assessments',
+                            data: lastSixMonths.map(key => monthlyData[key].assessments),
+                            backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Maintenance',
+                            data: lastSixMonths.map(key => monthlyData[key].maintenance),
+                            backgroundColor: 'rgba(255, 159, 64, 0.8)',
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadAnalyticsCharts() {
+            // Destroy existing analytics charts if they exist
+            const destroyChart = (chart) => {
+                if (chart) {
+                    chart.destroy();
+                }
+            };
+            
+            destroyChart(analyticsProjectStatusChart);
+            destroyChart(analyticsHealthTrendChart);
+            destroyChart(analyticsSpeciesTypeChart);
+            destroyChart(analyticsMaintenanceTypeChart);
+            destroyChart(analyticsMonthlyActivityChart);
+            
+            // Load data
+            const projects = db.getProjects();
+            const assessments = db.getAssessments();
+            const species = db.getSpecies();
+            const maintenance = db.getMaintenance();
+            
+            // Project Status Chart for Analytics
+            const projectStatusData = {
+                'planning': 0,
+                'active': 0,
+                'on-hold': 0,
+                'completed': 0
+            };
+            
+            projects.forEach(project => {
+                projectStatusData[project.status]++;
+            });
+            
+            const projectStatusColors = {
+                'planning': 'rgba(54, 162, 235, 0.8)',
+                'active': 'rgba(75, 192, 192, 0.8)',
+                'on-hold': 'rgba(255, 206, 86, 0.8)',
+                'completed': 'rgba(153, 102, 255, 0.8)'
+            };
+            
+            const projectStatusLabels = Object.keys(projectStatusData).map(key => 
+                key.charAt(0).toUpperCase() + key.slice(1)
+            );
+            
+            const analyticsProjectStatusCtx = document.getElementById('analyticsProjectStatusChart').getContext('2d');
+            analyticsProjectStatusChart = new Chart(analyticsProjectStatusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: projectStatusLabels,
+                    datasets: [{
+                        data: Object.values(projectStatusData),
+                        backgroundColor: Object.keys(projectStatusData).map(status => projectStatusColors[status]),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Project Status Distribution'
+                        }
+                    }
+                }
+            });
+            
+            // Health Trend Chart for Analytics
+            const sortedAssessments = [...assessments].sort((a, b) => new Date(a.date) - new Date(b.date));
+            const healthValues = {
+                'excellent': 5,
+                'good': 4,
+                'fair': 3,
+                'poor': 2,
+                'degraded': 1
+            };
+            
+            const analyticsHealthTrendCtx = document.getElementById('analyticsHealthTrendChart').getContext('2d');
+            analyticsHealthTrendChart = new Chart(analyticsHealthTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: sortedAssessments.map(a => formatDate(a.date, 'short')),
+                    datasets: [{
+                        label: 'Health Score',
+                        data: sortedAssessments.map(a => healthValues[a.health]),
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        pointBackgroundColor: sortedAssessments.map(a => {
+                            const colors = {
+                                'excellent': 'rgb(40, 167, 69)',
+                                'good': 'rgb(23, 162, 184)',
+                                'fair': 'rgb(255, 193, 7)',
+                                'poor': 'rgb(255, 132, 17)',
+                                'degraded': 'rgb(220, 53, 69)'
+                            };
+                            return colors[a.health];
+                        }),
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 6,
+                            ticks: {
+                                callback: function(value) {
+                                    const labels = {
+                                        1: 'Degraded',
+                                        2: 'Poor',
+                                        3: 'Fair',
+                                        4: 'Good',
+                                        5: 'Excellent'
+                                    };
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Species Type Chart for Analytics
+            const speciesTypeData = {
+                'plant': 0,
+                'animal': 0,
+                'bird': 0,
+                'reptile': 0,
+                'insect': 0
+            };
+            
+            species.forEach(s => {
+                speciesTypeData[s.type]++;
+            });
+            
+            const analyticsSpeciesTypeCtx = document.getElementById('analyticsSpeciesTypeChart').getContext('2d');
+            analyticsSpeciesTypeChart = new Chart(analyticsSpeciesTypeCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(speciesTypeData).map(key => 
+                        key.charAt(0).toUpperCase() + key.slice(1)
+                    ),
+                    datasets: [{
+                        data: Object.values(speciesTypeData),
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+
+            
+            // Maintenance Type Chart for Analytics
+            const maintenanceTypeData = {
+                'weed-control': 0,
+                'revegetation': 0,
+                'monitoring': 0,
+                'survey': 0,
+                'erosion-control': 0,
+                'pest-management': 0,
+                'water-quality': 0,
+                'trail-maintenance': 0,
+                'equipment': 0,
+                'other': 0
+            };
+            
+            maintenance.forEach(item => {
+                maintenanceTypeData[item.type]++;
+            });
+            
+            // Filter out types with zero count
+            const filteredMaintenanceTypes = Object.keys(maintenanceTypeData).filter(key => maintenanceTypeData[key] > 0);
+            
+            const analyticsMaintenanceTypeCtx = document.getElementById('analyticsMaintenanceTypeChart').getContext('2d');
+            analyticsMaintenanceTypeChart = new Chart(analyticsMaintenanceTypeCtx, {
+                type: 'bar',
+                data: {
+                    labels: filteredMaintenanceTypes.map(key => 
+                        key.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                    ),
+                    datasets: [{
+                        label: 'Number of Activities',
+                        data: filteredMaintenanceTypes.map(key => maintenanceTypeData[key]),
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Monthly Activity Chart for Analytics
+            const monthlyData = {};
+            const lastSixMonths = [];
+            const now = new Date();
+            
+            // Generate last 6 months labels
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                const monthLabel = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+                lastSixMonths.push(monthKey);
+                monthlyData[monthKey] = { 
+                    label: monthLabel, 
+                    assessments: 0,
+                    maintenance: 0
+                };
+            }
+            
+            // Count assessments by month
+            assessments.forEach(assessment => {
+                const date = new Date(assessment.date);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                
+                if (monthlyData[monthKey]) {
+                    monthlyData[monthKey].assessments++;
+                }
+            });
+            
+            // Count maintenance by month
+            maintenance.forEach(item => {
+                const date = new Date(item.date);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                
+                if (monthlyData[monthKey]) {
+                    monthlyData[monthKey].maintenance++;
+                }
+            });
+            
+            const analyticsMonthlyActivityCtx = document.getElementById('analyticsMonthlyActivityChart').getContext('2d');
+            analyticsMonthlyActivityChart = new Chart(analyticsMonthlyActivityCtx, {
                 type: 'bar',
                 data: {
                     labels: lastSixMonths.map(key => monthlyData[key].label),
@@ -2127,109 +2420,119 @@
         }
 
         function exportToJSON(projectId) {
-            const data = {
-                projects: projectId === 'all' ? db.getProjects() : db.getProjects().filter(p => p.id === projectId),
-                assessments: projectId === 'all' ? db.getAssessments() : db.getAssessments().filter(a => a.projectId === projectId),
-                species: projectId === 'all' ? db.getSpecies() : db.getSpecies().filter(s => s.projectId === projectId),
-                maintenance: projectId === 'all' ? db.getMaintenance() : db.getMaintenance().filter(m => m.projectId === projectId),
-                exportedAt: new Date().toISOString(),
-                app: 'EcoManager Pro'
-            };
-            
-            const dataStr = JSON.stringify(data, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = `ecomanager-${projectId === 'all' ? 'all-projects' : 'project-' + projectId}-${new Date().toISOString().slice(0, 10)}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
-            showToast('Export Successful', 'Data has been exported successfully', 'success');
+            try {
+                const data = {
+                    projects: projectId === 'all' ? db.getProjects() : db.getProjects().filter(p => p.id === projectId),
+                    assessments: projectId === 'all' ? db.getAssessments() : db.getAssessments().filter(a => a.projectId === projectId),
+                    species: projectId === 'all' ? db.getSpecies() : db.getSpecies().filter(s => s.projectId === projectId),
+                    maintenance: projectId === 'all' ? db.getMaintenance() : db.getMaintenance().filter(m => m.projectId === projectId),
+                    exportedAt: new Date().toISOString(),
+                    app: 'EcoManager Pro'
+                };
+                
+                const dataStr = JSON.stringify(data, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `ecomanager-${projectId === 'all' ? 'all-projects' : 'project-' + projectId}-${new Date().toISOString().slice(0, 10)}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                showToast('Export Successful', 'Data has been exported successfully', 'success');
+            } catch (error) {
+                console.error('Export error:', error);
+                showToast('Export Error', 'Failed to export data', 'error');
+            }
         }
 
         function exportToPDF(projectId) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Add title
-            doc.setFontSize(20);
-            doc.text('EcoManager Pro Report', 105, 15, { align: 'center' });
-            doc.setFontSize(12);
-            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 22, { align: 'center' });
-            
-            let yPosition = 30;
-            
-            // Project information
-            const projects = projectId === 'all' ? db.getProjects() : db.getProjects().filter(p => p.id === projectId);
-            
-            if (projects.length > 0) {
-                doc.setFontSize(16);
-                doc.text('Projects', 14, yPosition);
-                yPosition += 10;
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
                 
-                projects.forEach((project, index) {
-                    if (yPosition > 260) {
-                        doc.addPage();
-                        yPosition = 20;
-                    }
-                    
-                    doc.setFontSize(12);
-                    doc.setFont(undefined, 'bold');
-                    doc.text(`${index + 1}. ${project.name}`, 14, yPosition);
-                    doc.setFont(undefined, 'normal');
-                    
-                    yPosition += 7;
-                    doc.text(`Status: ${project.status}`, 14, yPosition);
-                    yPosition += 7;
-                    doc.text(`Start Date: ${formatDate(project.startDate)}`, 14, yPosition);
-                    yPosition += 7;
-                    doc.text(`Description: ${project.description}`, 14, yPosition);
-                    yPosition += 10;
-                });
-            }
-            
-            // Add a new page if we're at the bottom
-            if (yPosition > 260) {
-                doc.addPage();
-                yPosition = 20;
-            }
-            
-            // Assessments information
-            const assessments = projectId === 'all' ? db.getAssessments() : db.getAssessments().filter(a => a.projectId === projectId);
-            
-            if (assessments.length > 0) {
-                doc.setFontSize(16);
-                doc.text('Assessments', 14, yPosition);
-                yPosition += 10;
+                // Add title
+                doc.setFontSize(20);
+                doc.text('EcoManager Pro Report', 105, 15, { align: 'center' });
+                doc.setFontSize(12);
+                doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 22, { align: 'center' });
                 
-                assessments.forEach((assessment, index) {
-                    if (yPosition > 260) {
-                        doc.addPage();
-                        yPosition = 20;
-                    }
-                    
-                    doc.setFontSize(12);
-                    doc.setFont(undefined, 'bold');
-                    doc.text(`${index + 1}. ${formatDate(assessment.date)} - ${assessment.assessor}`, 14, yPosition);
-                    doc.setFont(undefined, 'normal');
-                    
-                    yPosition += 7;
-                    doc.text(`Health Status: ${assessment.health}`, 14, yPosition);
-                    yPosition += 7;
-                    doc.text(`Project: ${getProjectName(assessment.projectId)}`, 14, yPosition);
-                    yPosition += 7;
-                    doc.text(`Description: ${assessment.description.substring(0, 100)}...`, 14, yPosition);
+                let yPosition = 30;
+                
+                // Project information
+                const projects = projectId === 'all' ? db.getProjects() : db.getProjects().filter(p => p.id === projectId);
+                
+                if (projects.length > 0) {
+                    doc.setFontSize(16);
+                    doc.text('Projects', 14, yPosition);
                     yPosition += 10;
-                });
+                    
+                    projects.forEach((project, index) => {
+                        if (yPosition > 260) {
+                            doc.addPage();
+                            yPosition = 20;
+                        }
+                        
+                        doc.setFontSize(12);
+                        doc.setFont(undefined, 'bold');
+                        doc.text(`${index + 1}. ${project.name}`, 14, yPosition);
+                        doc.setFont(undefined, 'normal');
+                        
+                        yPosition += 7;
+                        doc.text(`Status: ${project.status}`, 14, yPosition);
+                        yPosition += 7;
+                        doc.text(`Start Date: ${formatDate(project.startDate)}`, 14, yPosition);
+                        yPosition += 7;
+                        doc.text(`Description: ${project.description}`, 14, yPosition);
+                        yPosition += 10;
+                    });
+                }
+                
+                // Add a new page if we're at the bottom
+                if (yPosition > 260) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                
+                // Assessments information
+                const assessments = projectId === 'all' ? db.getAssessments() : db.getAssessments().filter(a => a.projectId === projectId);
+                
+                if (assessments.length > 0) {
+                    doc.setFontSize(16);
+                    doc.text('Assessments', 14, yPosition);
+                    yPosition += 10;
+                    
+                    assessments.forEach((assessment, index) => {
+                        if (yPosition > 260) {
+                            doc.addPage();
+                            yPosition = 20;
+                        }
+                        
+                        doc.setFontSize(12);
+                        doc.setFont(undefined, 'bold');
+                        doc.text(`${index + 1}. ${formatDate(assessment.date)} - ${assessment.assessor}`, 14, yPosition);
+                        doc.setFont(undefined, 'normal');
+                        
+                        yPosition += 7;
+                        doc.text(`Health Status: ${assessment.health}`, 14, yPosition);
+                        yPosition += 7;
+                        doc.text(`Project: ${getProjectName(assessment.projectId)}`, 14, yPosition);
+                        yPosition += 7;
+                        doc.text(`Description: ${assessment.description.substring(0, 100)}...`, 14, yPosition);
+                        yPosition += 10;
+                    });
+                }
+                
+                // Save the PDF
+                const fileName = `ecomanager-report-${projectId === 'all' ? 'all-projects' : 'project-' + projectId}-${new Date().toISOString().slice(0, 10)}.pdf`;
+                doc.save(fileName);
+                
+                showToast('PDF Export Successful', 'PDF report has been generated successfully', 'success');
+            } catch (error) {
+                console.error('PDF export error:', error);
+                showToast('PDF Export Error', 'Failed to generate PDF report', 'error');
             }
-            
-            // Save the PDF
-            const fileName = `ecomanager-report-${projectId === 'all' ? 'all-projects' : 'project-' + projectId}-${new Date().toISOString().slice(0, 10)}.pdf`;
-            doc.save(fileName);
-            
-            showToast('PDF Export Successful', 'PDF report has been generated successfully', 'success');
         }
 
         function importData() {
@@ -2253,70 +2556,89 @@
                         throw new Error('Invalid file format');
                     }
                     
-                    if (overwriteData) {
-                        // Completely replace existing data
-                        localStorage.setItem('projects', JSON.stringify(data.projects));
-                        localStorage.setItem('assessments', JSON.stringify(data.assessments));
-                        localStorage.setItem('species', JSON.stringify(data.species));
-                        localStorage.setItem('maintenance', JSON.stringify(data.maintenance));
-                    } else {
-                        // Merge with existing data
-                        const existingProjects = db.getProjects();
-                        const existingAssessments = db.getAssessments();
-                        const existingSpecies = db.getSpecies();
-                        const existingMaintenance = db.getMaintenance();
+                    // Create backup before import
+                    const backup = {
+                        projects: localStorage.getItem('projects'),
+                        assessments: localStorage.getItem('assessments'),
+                        species: localStorage.getItem('species'),
+                        maintenance: localStorage.getItem('maintenance')
+                    };
+                    
+                    try {
+                        if (overwriteData) {
+                            // Completely replace existing data
+                            localStorage.setItem('projects', JSON.stringify(data.projects));
+                            localStorage.setItem('assessments', JSON.stringify(data.assessments));
+                            localStorage.setItem('species', JSON.stringify(data.species));
+                            localStorage.setItem('maintenance', JSON.stringify(data.maintenance));
+                        } else {
+                            // Merge with existing data
+                            const existingProjects = db.getProjects();
+                            const existingAssessments = db.getAssessments();
+                            const existingSpecies = db.getSpecies();
+                            const existingMaintenance = db.getMaintenance();
+                            
+                            // Merge projects, avoiding duplicates by ID
+                            const mergedProjects = [...existingProjects];
+                            data.projects.forEach(newProject => {
+                                if (!existingProjects.find(p => p.id === newProject.id)) {
+                                    mergedProjects.push(newProject);
+                                }
+                            });
+                            
+                            // Merge assessments
+                            const mergedAssessments = [...existingAssessments];
+                            data.assessments.forEach(newAssessment => {
+                                if (!existingAssessments.find(a => a.id === newAssessment.id)) {
+                                    mergedAssessments.push(newAssessment);
+                                }
+                            });
+                            
+                            // Merge species
+                            const mergedSpecies = [...existingSpecies];
+                            data.species.forEach(newSpecies => {
+                                if (!existingSpecies.find(s => s.id === newSpecies.id)) {
+                                    mergedSpecies.push(newSpecies);
+                                }
+                            });
+                            
+                            // Merge maintenance
+                            const mergedMaintenance = [...existingMaintenance];
+                            data.maintenance.forEach(newMaintenance => {
+                                if (!existingMaintenance.find(m => m.id === newMaintenance.id)) {
+                                    mergedMaintenance.push(newMaintenance);
+                                }
+                            });
+                            
+                            // Save merged data
+                            localStorage.setItem('projects', JSON.stringify(mergedProjects));
+                            localStorage.setItem('assessments', JSON.stringify(mergedAssessments));
+                            localStorage.setItem('species', JSON.stringify(mergedSpecies));
+                            localStorage.setItem('maintenance', JSON.stringify(mergedMaintenance));
+                        }
                         
-                        // Merge projects, avoiding duplicates by ID
-                        const mergedProjects = [...existingProjects];
-                        data.projects.forEach(newProject => {
-                            if (!existingProjects.find(p => p.id === newProject.id)) {
-                                mergedProjects.push(newProject);
-                            }
-                        });
+                        // Refresh the UI
+                        loadDashboard();
+                        loadProjects();
+                        loadAssessments();
+                        loadSpecies();
+                        loadMaintenance();
+                        loadProjectSelects();
                         
-                        // Merge assessments
-                        const mergedAssessments = [...existingAssessments];
-                        data.assessments.forEach(newAssessment => {
-                            if (!existingAssessments.find(a => a.id === newAssessment.id)) {
-                                mergedAssessments.push(newAssessment);
-                            }
-                        });
+                        showToast('Import Successful', 'Data has been imported successfully', 'success');
                         
-                        // Merge species
-                        const mergedSpecies = [...existingSpecies];
-                        data.species.forEach(newSpecies => {
-                            if (!existingSpecies.find(s => s.id === newSpecies.id)) {
-                                mergedSpecies.push(newSpecies);
-                            }
-                        });
+                        // Clear the file input
+                        fileInput.value = '';
                         
-                        // Merge maintenance
-                        const mergedMaintenance = [...existingMaintenance];
-                        data.maintenance.forEach(newMaintenance => {
-                            if (!existingMaintenance.find(m => m.id === newMaintenance.id)) {
-                                mergedMaintenance.push(newMaintenance);
-                            }
-                        });
+                    } catch (error) {
+                        // Restore backup if import fails
+                        localStorage.setItem('projects', backup.projects);
+                        localStorage.setItem('assessments', backup.assessments);
+                        localStorage.setItem('species', backup.species);
+                        localStorage.setItem('maintenance', backup.maintenance);
                         
-                        // Save merged data
-                        localStorage.setItem('projects', JSON.stringify(mergedProjects));
-                        localStorage.setItem('assessments', JSON.stringify(mergedAssessments));
-                        localStorage.setItem('species', JSON.stringify(mergedSpecies));
-                        localStorage.setItem('maintenance', JSON.stringify(mergedMaintenance));
+                        throw error;
                     }
-                    
-                    // Refresh the UI
-                    loadDashboard();
-                    loadProjects();
-                    loadAssessments();
-                    loadSpecies();
-                    loadMaintenance();
-                    loadProjectSelects();
-                    
-                    showToast('Import Successful', 'Data has been imported successfully', 'success');
-                    
-                    // Clear the file input
-                    fileInput.value = '';
                     
                 } catch (error) {
                     console.error('Import error:', error);
@@ -2350,67 +2672,92 @@
                 description: document.getElementById('projectDescription').value
             };
             
-            db.saveProject(project);
-            this.reset();
-            loadProjects();
-            loadDataSummary();
-            showToast('Success', 'Project created successfully');
+            if (db.saveProject(project)) {
+                this.reset();
+                loadProjects();
+                loadDataSummary();
+                showToast('Success', 'Project created successfully');
+            }
         });
 
         document.getElementById('assessmentForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const projectSelect = document.getElementById('assessmentProject');
+            if (projectSelect.value === '') {
+                showToast('Error', 'Please select a project', 'error');
+                projectSelect.focus();
+                return;
+            }
+            
             const assessment = {
                 date: document.getElementById('assessmentDate').value,
                 assessor: document.getElementById('assessor').value,
                 health: document.getElementById('healthStatus').value,
-                projectId: document.getElementById('assessmentProject').value,
+                projectId: projectSelect.value,
                 description: document.getElementById('assessmentDescription').value
             };
             
-            db.saveAssessment(assessment);
-            this.reset();
-            loadAssessments();
-            loadDataSummary();
-            showToast('Success', 'Assessment saved successfully');
+            if (db.saveAssessment(assessment)) {
+                this.reset();
+                loadAssessments();
+                loadDataSummary();
+                showToast('Success', 'Assessment saved successfully');
+            }
         });
 
         document.getElementById('speciesForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            const projectSelect = document.getElementById('speciesProject');
+            if (projectSelect.value === '') {
+                showToast('Error', 'Please select a project', 'error');
+                projectSelect.focus();
+                return;
+            }
             
             const species = {
                 name: document.getElementById('speciesName').value,
                 scientificName: document.getElementById('scientificName').value,
                 type: document.getElementById('speciesType').value,
                 status: document.getElementById('speciesStatus').value,
-                projectId: document.getElementById('speciesProject').value,
+                projectId: projectSelect.value,
                 description: document.getElementById('speciesDescription').value
             };
             
-            db.saveSpecies(species);
-            this.reset();
-            loadSpecies();
-            loadDataSummary();
-            showToast('Success', 'Species added successfully');
+            if (db.saveSpecies(species)) {
+                this.reset();
+                loadSpecies();
+                loadDataSummary();
+                showToast('Success', 'Species added successfully');
+            }
         });
 
         document.getElementById('maintenanceForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            const projectSelect = document.getElementById('maintenanceProject');
+            if (projectSelect.value === '') {
+                showToast('Error', 'Please select a project', 'error');
+                projectSelect.focus();
+                return;
+            }
             
             const maintenance = {
                 activity: document.getElementById('maintenanceActivity').value,
                 type: document.getElementById('maintenanceType').value,
                 date: document.getElementById('maintenanceDate').value,
                 priority: document.getElementById('maintenancePriority').value,
-                projectId: document.getElementById('maintenanceProject').value,
+                projectId: projectSelect.value,
                 description: document.getElementById('maintenanceDescription').value
             };
             
-            db.saveMaintenance(maintenance);
-            this.reset();
-            loadMaintenance();
-            loadDataSummary();
-            showToast('Success', 'Maintenance activity scheduled successfully');
+            if (db.saveMaintenance(maintenance)) {
+                this.reset();
+                loadMaintenance();
+                loadDataSummary();
+                showToast('Success', 'Maintenance activity scheduled successfully');
+            }
         });
 
         // Filter handlers
@@ -2448,54 +2795,59 @@
                 });
                 
                 // Delete the project
-                db.deleteProject(id);
-                loadProjects();
-                loadAssessments();
-                loadSpecies();
-                loadMaintenance();
-                loadDataSummary();
-                showToast('Success', 'Project and all associated items deleted successfully');
+                if (db.deleteProject(id)) {
+                    loadProjects();
+                    loadAssessments();
+                    loadSpecies();
+                    loadMaintenance();
+                    loadDataSummary();
+                    showToast('Success', 'Project and all associated items deleted successfully');
+                }
             }
         }
 
         function deleteAssessment(id) {
             if (confirm('Are you sure you want to delete this assessment?')) {
-                db.deleteAssessment(id);
-                loadAssessments();
-                loadDataSummary();
-                showToast('Success', 'Assessment deleted successfully');
+                if (db.deleteAssessment(id)) {
+                    loadAssessments();
+                    loadDataSummary();
+                    showToast('Success', 'Assessment deleted successfully');
+                }
             }
         }
 
         function deleteSpecies(id) {
             if (confirm('Are you sure you want to delete this species?')) {
-                db.deleteSpecies(id);
-                loadSpecies();
-                loadDataSummary();
-                showToast('Success', 'Species deleted successfully');
+                if (db.deleteSpecies(id)) {
+                    loadSpecies();
+                    loadDataSummary();
+                    showToast('Success', 'Species deleted successfully');
+                }
             }
         }
 
         function deleteMaintenance(id) {
             if (confirm('Are you sure you want to delete this maintenance activity?')) {
-                db.deleteMaintenance(id);
-                loadMaintenance();
-                loadDataSummary();
-                showToast('Success', 'Maintenance activity deleted successfully');
+                if (db.deleteMaintenance(id)) {
+                    loadMaintenance();
+                    loadDataSummary();
+                    showToast('Success', 'Maintenance activity deleted successfully');
+                }
             }
         }
 
         function completeMaintenance(id) {
             if (confirm('Mark this maintenance activity as completed?')) {
-                db.updateMaintenanceStatus(id, 'completed');
-                loadMaintenance();
-                showToast('Success', 'Maintenance activity marked as completed');
+                if (db.updateMaintenanceStatus(id, 'completed')) {
+                    loadMaintenance();
+                    showToast('Success', 'Maintenance activity marked as completed');
+                }
             }
         }
 
         // Utility functions
         function formatDate(dateString, format = 'full') {
-            if (!dateString) return 'Not specified';
+            if (!dateString || isNaN(new Date(dateString))) return 'Invalid date';
             const date = new Date(dateString);
             
             if (format === 'short') {
@@ -2556,7 +2908,9 @@
 
         function getMaintenanceStatusClass(item) {
             const today = new Date();
+            today.setHours(0, 0, 0, 0);
             const scheduledDate = new Date(item.date);
+            scheduledDate.setHours(0, 0, 0, 0);
             
             if (item.status === 'completed') return 'maintenance-completed';
             if (scheduledDate < today && item.status !== 'completed') return 'maintenance-overdue';
@@ -2566,7 +2920,8 @@
         // View toggle functionality
         function setupViewToggle() {
             const viewButtons = document.querySelectorAll('.view-toggle button');
-            const views = document.querySelectorAll('#list-view, #calendar-view');
+            const listView = document.getElementById('list-view');
+            const calendarView = document.getElementById('calendar-view');
             
             viewButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -2577,17 +2932,14 @@
                     this.classList.add('active');
                     
                     // Show/hide views
-                    views.forEach(view => {
-                        view.classList.remove('active');
-                        if (view.id === targetView) {
-                            view.classList.add('active');
-                            
-                            // If switching to calendar view, initialize it
-                            if (targetView === 'calendar-view') {
-                                loadCalendar();
-                            }
-                        }
-                    });
+                    if (targetView === 'list-view') {
+                        listView.classList.add('active');
+                        calendarView.classList.remove('active');
+                    } else if (targetView === 'calendar-view') {
+                        listView.classList.remove('active');
+                        calendarView.classList.add('active');
+                        loadCalendar();
+                    }
                 });
             });
         }
@@ -2620,7 +2972,7 @@
                         // Reset to list view when navigating to maintenance
                         document.querySelector('[data-view="list-view"]').click();
                     }
-                    if (target === 'charts') loadCharts();
+                    if (target === 'charts') loadAnalyticsCharts();
                     if (target === 'data') {
                         loadDataSummary();
                         loadProjectSelects();
@@ -2628,23 +2980,25 @@
                 }, 50);
                 
                 // Update page title
-                document.title = `${this.querySelector('span').textContent} | EcoManager Pro`;
+                const sectionName = this.querySelector('span').textContent;
+                document.title = `${sectionName} | EcoManager Pro`;
             });
         });
 
         // Initialize the application
         function initApp() {
-            db.init();
-            loadDashboard();
-            loadProjectSelects();
-            setupViewToggle();
-            loadDataSummary();
-            
-            // Initialize tooltips
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
+            if (db.init()) {
+                loadDashboard();
+                loadProjectSelects();
+                setupViewToggle();
+                loadDataSummary();
+                
+                // Initialize tooltips
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            }
         }
 
         // Start the app when the DOM is loaded

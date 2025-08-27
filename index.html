@@ -2280,8 +2280,6 @@
                 }
             });
             
-
-            
             // Maintenance Type Chart for Analytics
             const maintenanceTypeData = {
                 'weed-control': 0,
@@ -2468,7 +2466,7 @@
                     doc.text('Projects', 14, yPosition);
                     yPosition += 10;
                     
-                    projects.forEach((project, index) => {
+                    projects.forEach((project, index) {
                         if (yPosition > 260) {
                             doc.addPage();
                             yPosition = 20;
@@ -2503,7 +2501,7 @@
                     doc.text('Assessments', 14, yPosition);
                     yPosition += 10;
                     
-                    assessments.forEach((assessment, index) => {
+                    assessments.forEach((assessment, index) {
                         if (yPosition > 260) {
                             doc.addPage();
                             yPosition = 20;
@@ -2552,8 +2550,19 @@
                     const data = JSON.parse(e.target.result);
                     
                     // Validate the imported data structure
-                    if (!data.projects || !data.assessments || !data.species || !data.maintenance) {
+                    if (!data || typeof data !== 'object') {
                         throw new Error('Invalid file format');
+                    }
+                    
+                    // Check if it's our app data format
+                    const hasValidStructure = 
+                        (Array.isArray(data.projects) || data.projects === undefined) &&
+                        (Array.isArray(data.assessments) || data.assessments === undefined) &&
+                        (Array.isArray(data.species) || data.species === undefined) &&
+                        (Array.isArray(data.maintenance) || data.maintenance === undefined);
+                    
+                    if (!hasValidStructure) {
+                        throw new Error('Invalid file format - not a valid EcoManager Pro export');
                     }
                     
                     // Create backup before import
@@ -2567,10 +2576,10 @@
                     try {
                         if (overwriteData) {
                             // Completely replace existing data
-                            localStorage.setItem('projects', JSON.stringify(data.projects));
-                            localStorage.setItem('assessments', JSON.stringify(data.assessments));
-                            localStorage.setItem('species', JSON.stringify(data.species));
-                            localStorage.setItem('maintenance', JSON.stringify(data.maintenance));
+                            if (data.projects) localStorage.setItem('projects', JSON.stringify(data.projects));
+                            if (data.assessments) localStorage.setItem('assessments', JSON.stringify(data.assessments));
+                            if (data.species) localStorage.setItem('species', JSON.stringify(data.species));
+                            if (data.maintenance) localStorage.setItem('maintenance', JSON.stringify(data.maintenance));
                         } else {
                             // Merge with existing data
                             const existingProjects = db.getProjects();
@@ -2580,35 +2589,43 @@
                             
                             // Merge projects, avoiding duplicates by ID
                             const mergedProjects = [...existingProjects];
-                            data.projects.forEach(newProject => {
-                                if (!existingProjects.find(p => p.id === newProject.id)) {
-                                    mergedProjects.push(newProject);
-                                }
-                            });
+                            if (data.projects) {
+                                data.projects.forEach(newProject => {
+                                    if (!existingProjects.find(p => p.id === newProject.id)) {
+                                        mergedProjects.push(newProject);
+                                    }
+                                });
+                            }
                             
                             // Merge assessments
                             const mergedAssessments = [...existingAssessments];
-                            data.assessments.forEach(newAssessment => {
-                                if (!existingAssessments.find(a => a.id === newAssessment.id)) {
-                                    mergedAssessments.push(newAssessment);
-                                }
-                            });
+                            if (data.assessments) {
+                                data.assessments.forEach(newAssessment => {
+                                    if (!existingAssessments.find(a => a.id === newAssessment.id)) {
+                                        mergedAssessments.push(newAssessment);
+                                    }
+                                });
+                            }
                             
                             // Merge species
                             const mergedSpecies = [...existingSpecies];
-                            data.species.forEach(newSpecies => {
-                                if (!existingSpecies.find(s => s.id === newSpecies.id)) {
-                                    mergedSpecies.push(newSpecies);
-                                }
-                            });
+                            if (data.species) {
+                                data.species.forEach(newSpecies => {
+                                    if (!existingSpecies.find(s => s.id === newSpecies.id)) {
+                                        mergedSpecies.push(newSpecies);
+                                    }
+                                });
+                            }
                             
                             // Merge maintenance
                             const mergedMaintenance = [...existingMaintenance];
-                            data.maintenance.forEach(newMaintenance => {
-                                if (!existingMaintenance.find(m => m.id === newMaintenance.id)) {
-                                    mergedMaintenance.push(newMaintenance);
-                                }
-                            });
+                            if (data.maintenance) {
+                                data.maintenance.forEach(newMaintenance => {
+                                    if (!existingMaintenance.find(m => m.id === newMaintenance.id)) {
+                                        mergedMaintenance.push(newMaintenance);
+                                    }
+                                });
+                            }
                             
                             // Save merged data
                             localStorage.setItem('projects', JSON.stringify(mergedProjects));
@@ -2945,45 +2962,47 @@
         }
 
         // Navigation
-        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Update active state
-                document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Show the corresponding section
-                const target = this.getAttribute('data-target');
-                document.querySelectorAll('.content-section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                
-                setTimeout(() => {
-                    document.getElementById(target).classList.add('active');
+        function setupNavigation() {
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
                     
-                    // Load data for the section
-                    if (target === 'dashboard') loadDashboard();
-                    if (target === 'projects') loadProjects();
-                    if (target === 'assessments') loadAssessments();
-                    if (target === 'species') loadSpecies();
-                    if (target === 'maintenance') {
-                        loadMaintenance();
-                        // Reset to list view when navigating to maintenance
-                        document.querySelector('[data-view="list-view"]').click();
-                    }
-                    if (target === 'charts') loadAnalyticsCharts();
-                    if (target === 'data') {
-                        loadDataSummary();
-                        loadProjectSelects();
-                    }
-                }, 50);
-                
-                // Update page title
-                const sectionName = this.querySelector('span').textContent;
-                document.title = `${sectionName} | EcoManager Pro`;
+                    // Update active state
+                    document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show the corresponding section
+                    const target = this.getAttribute('data-target');
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    setTimeout(() => {
+                        document.getElementById(target).classList.add('active');
+                        
+                        // Load data for the section
+                        if (target === 'dashboard') loadDashboard();
+                        if (target === 'projects') loadProjects();
+                        if (target === 'assessments') loadAssessments();
+                        if (target === 'species') loadSpecies();
+                        if (target === 'maintenance') {
+                            loadMaintenance();
+                            // Reset to list view when navigating to maintenance
+                            document.querySelector('[data-view="list-view"]').click();
+                        }
+                        if (target === 'charts') loadAnalyticsCharts();
+                        if (target === 'data') {
+                            loadDataSummary();
+                            loadProjectSelects();
+                        }
+                    }, 50);
+                    
+                    // Update page title
+                    const sectionName = this.querySelector('span').textContent;
+                    document.title = `${sectionName} | EcoManager Pro`;
+                });
             });
-        });
+        }
 
         // Initialize the application
         function initApp() {
@@ -2991,6 +3010,7 @@
                 loadDashboard();
                 loadProjectSelects();
                 setupViewToggle();
+                setupNavigation();
                 loadDataSummary();
                 
                 // Initialize tooltips
